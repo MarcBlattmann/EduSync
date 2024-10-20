@@ -4,7 +4,8 @@ import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Loader2, Mail, Lock, User, ArrowLeft, Sun, Moon } from "lucide-react"
+import { Loader2, Mail, Lock, User, ArrowLeft, Sun, Moon, AlertCircle, CheckCircle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -39,6 +40,7 @@ const formSchema = z.object({
 export default function RegistrationPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [formProgress, setFormProgress] = useState(0)
+  const [feedbackMessage, setFeedbackMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -67,7 +69,7 @@ export default function RegistrationPage() {
     setTimeout(() => {
       setIsLoading(false)
       console.log(values)
-      // Registration successful, but we're not showing a success banner anymore
+      setFeedbackMessage({ type: 'success', message: "Registration successful! You have created an account." })
     }, 2000)
   }
 
@@ -107,6 +109,29 @@ export default function RegistrationPage() {
           <p className="text-muted-foreground">Enter your information to get started</p>
         </CardHeader>
         <CardContent className="space-y-6">
+          <AnimatePresence mode="wait">
+            {feedbackMessage && (
+              <motion.div
+                key="feedback"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.3 }}
+                className={`p-4 rounded-md flex items-center space-x-2 ${
+                  feedbackMessage.type === 'success'
+                    ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100'
+                    : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100'
+                }`}
+              >
+                {feedbackMessage.type === 'success' ? (
+                  <CheckCircle className="h-5 w-5" />
+                ) : (
+                  <AlertCircle className="h-5 w-5" />
+                )}
+                <span>{feedbackMessage.message}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Form Progress</span>
@@ -162,7 +187,18 @@ export default function RegistrationPage() {
                           <Input placeholder="John Doe" {...field} className="pl-10 py-2 text-black dark:text-white placeholder:text-muted-foreground" />
                         </div>
                       </FormControl>
-                      <FormMessage className="dark:text-red-500" />
+                      <AnimatePresence mode="wait">
+                        {form.formState.errors.name && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <FormMessage className="dark:text-red-500" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </FormItem>
                   )}
                 />
@@ -178,7 +214,18 @@ export default function RegistrationPage() {
                           <Input type="email" placeholder="john@example.com" {...field} className="pl-10 py-2 text-black dark:text-white placeholder:text-muted-foreground" />
                         </div>
                       </FormControl>
-                      <FormMessage className="dark:text-red-500" />
+                      <AnimatePresence mode="wait">
+                        {form.formState.errors.email && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <FormMessage className="dark:text-red-500" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </FormItem>
                   )}
                 />
@@ -194,7 +241,18 @@ export default function RegistrationPage() {
                           <Input type="password" placeholder="••••••••" {...field} className="pl-10 py-2 text-black dark:text-white placeholder:text-muted-foreground" />
                         </div>
                       </FormControl>
-                      <FormMessage className="dark:text-red-500" />
+                      <AnimatePresence mode="wait">
+                        {form.formState.errors.password && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <FormMessage className="dark:text-red-500" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </FormItem>
                   )}
                 />
@@ -221,7 +279,18 @@ export default function RegistrationPage() {
                           terms of service
                         </a>
                       </FormLabel>
-                      <FormMessage className="dark:text-red-500" />
+                      <AnimatePresence mode="wait">
+                        {form.formState.errors.terms && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <FormMessage className="dark:text-red-500" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </FormItem>
                 )}
