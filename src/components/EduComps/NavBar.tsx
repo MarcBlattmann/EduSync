@@ -9,15 +9,11 @@ export default function NavBar() {
       <div className="text-xl font-bold">EduSync</div>
       <div className="flex gap-3">
         <ModeToggle />
-        <Link href="/register" passHref>
-          <Button variant="outline">
+          <Button disabled variant="outline">
             Register
           </Button>
-        </Link>
         
-        <Link href="/login" passHref>
-          <Button>Login</Button>
-        </Link> 
+          <Button disabled>Login</Button>
       </div>
     </div>
   );
