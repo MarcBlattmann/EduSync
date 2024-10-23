@@ -11,3 +11,5 @@ At EduSync, we strive to empower students with the tools and resources they need
 ### Explore More
 
 Visit our website to learn more: [EduSync](https://www.edusync.info/)
+
+### Contributors
