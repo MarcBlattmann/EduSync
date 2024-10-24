@@ -13,3 +13,4 @@ At EduSync, we strive to empower students with the tools and resources they need
 Visit our website to learn more: [EduSync](https://www.edusync.info/)
 
 ### Contributors
+@MarcBlattmann
