@@ -14,3 +14,6 @@ Visit our website to learn more: [EduSync](https://www.edusync.info/)
 
 ### Contributors
 @MarcBlattmann
+
+### Repo Activity
+(Comming soon...)
