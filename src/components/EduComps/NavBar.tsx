@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./ThemeToggle";
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function NavBar() { 
 
@@ -9,11 +9,15 @@ export default function NavBar() {
       <div className="text-xl font-bold">EduSync</div>
       <div className="flex gap-3">
         <ModeToggle />
-          <Button disabled variant="outline">
-            Register
-          </Button>
-        
-          <Button disabled>Login</Button>
+          <Link href="./register">
+            <Button variant="outline">
+              Register
+            </Button>
+          </Link>
+
+          <Link href="./login">
+            <Button>Login</Button>
+          </Link>
       </div>
     </div>
   );
