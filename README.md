@@ -16,4 +16,4 @@ Visit our website to learn more: [EduSync](https://www.edusync.info/)
 @MarcBlattmann
 
 ### Repo Activity
-(Comming soon...)
+(Comming soon 😉)
