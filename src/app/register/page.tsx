@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Loader2, Mail, Lock, User, ArrowLeft, Sun, Moon, AlertCircle, CheckCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import Link from 'next/link';
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -22,6 +23,26 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useTheme } from "next-themes"
 import { Progress } from "@/components/ui/progress"
+
+import { initializeApp } from "firebase/app"
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getDatabase, ref, set } from "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBb1F9q9CW6yY4Yowg2WSk377qr6vZ6tTw",
+  authDomain: "edusyncprod.firebaseapp.com",
+  databaseURL: "https://edusyncprod-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "edusyncprod",
+  storageBucket: "edusyncprod.appspot.com",
+  messagingSenderId: "189742035984",
+  appId: "1:189742035984:web:4b9f8ae08fcc16c007c695",
+  measurementId: "G-G0WRWY2QDF"
+}
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+const database = getDatabase(app);
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -44,6 +65,7 @@ export default function RegistrationPage() {
   const [feedbackMessage, setFeedbackMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const router = useRouter()
 
   useEffect(() => setMounted(true), [])
 
@@ -64,19 +86,39 @@ export default function RegistrationPage() {
     setFormProgress((filledFields / Object.keys(values).length) * 100)
   }, [form.watch()])
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      console.log(values)
-      setFeedbackMessage({ type: 'success', message: "Registration successful! You have created an account." })
-    }, 2000)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+      
+      // Save user's name to Realtime Database
+      await set(ref(database, 'users/' + user.uid), {
+        name: values.name
+      });
+      
+      console.log("User registered:", user);
+      setFeedbackMessage({ type: 'success', message: "Registration successful! Redirecting to login..." });
+      setTimeout(() => router.push('./login'), 2000);
+    } catch (error) {
+      console.error("Registration error:", error);
+      setFeedbackMessage({ type: 'error', message: "Registration failed. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  function handleGoogleLogin() {
-    // Implement Google login logic here
-    console.log("Google login clicked")
+  async function handleGoogleLogin() {
+    const provider = new GoogleAuthProvider()
+    try {
+      const result = await signInWithPopup(auth, provider)
+      console.log("Google sign-in successful:", result.user)
+      setFeedbackMessage({ type: 'success', message: "Google sign-in successful! Redirecting to login..." })
+      setTimeout(() => router.push('./login'), 2000)
+    } catch (error) {
+      console.error("Google sign-in error:", error)
+      setFeedbackMessage({ type: 'error', message: "Google sign-in failed. Please try again." })
+    }
   }
 
   if (!mounted) return null
@@ -272,7 +314,7 @@ export default function RegistrationPage() {
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-foreground dark:text-foreground"
                       >
                         I agree to the{" "}
-                        <a href="#" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
+                        <a href="#" className="text-primary  hover:underline" onClick={(e) => e.stopPropagation()}>
                           terms of service
                         </a>
                       </FormLabel>
@@ -308,9 +350,9 @@ export default function RegistrationPage() {
         <CardFooter className="flex flex-col space-y-4 items-center">
           <div className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <a href="#" className="text-primary hover:underline font-medium">
+            <Link href="./login" className="text-primary hover:underline font-medium">
               Sign in
-            </a>
+            </Link>
           </div>
         </CardFooter>
       </Card>
