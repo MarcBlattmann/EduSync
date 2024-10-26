@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Loader2, Mail, Lock, User, ArrowLeft, Sun, Moon, AlertCircle, CheckCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from 'next/link';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -78,24 +79,20 @@ export default function RegistrationPage() {
     console.log("Google login clicked")
   }
 
-  function handleBack() {
-    // Implement back navigation logic here
-    console.log("Back button clicked")
-  }
-
   if (!mounted) return null
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background via-background to-background dark:from-background dark:via-background/50 dark:to-background p-4">
       <Card className="w-full max-w-xl shadow-lg relative">
-        <Button
-          variant="ghost"
-          className="absolute left-4 top-4 p-2"
-          onClick={handleBack}
-          aria-label="Go back"
-        >
+        <Link href="./">
+          <Button
+            variant="ghost"
+            className="absolute left-4 top-4 p-2"
+            aria-label="Go back"
+          >
           <ArrowLeft className="h-4 w-4" />
-        </Button>
+          </Button>
+        </Link>
         <Button
           variant="ghost"
           className="absolute right-4 top-4 p-2"
