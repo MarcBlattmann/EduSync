@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress"
 
 import { initializeApp } from "firebase/app"
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth"
+import { getDatabase, ref, set } from "firebase/database"
 
 const firebaseConfig = {
   apiKey: "AIzaSyBb1F9q9CW6yY4Yowg2WSk377qr6vZ6tTw",
@@ -40,6 +41,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
+const database = getDatabase(app)
 
 const formSchema = z.object({
   email: z.string().email({
@@ -105,7 +107,16 @@ export default function LoginPage() {
   async function handleGoogleLogin() {
     const provider = new GoogleAuthProvider()
     try {
-      await signInWithPopup(auth, provider)
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+      
+      // Save user data including profile picture URL to the database
+      await set(ref(database, 'users/' + user.uid), {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL
+      })
+
       setFeedbackMessage({ type: 'success', message: "Google-Anmeldung erfolgreich! Sie werden weitergeleitet..." })
       setTimeout(() => router.push('./app'), 2000)
     } catch (error) {
