@@ -55,9 +55,9 @@ export default function LandingPage({database, app}) {
                 className="flex items-center justify-center order-first lg:order-last"
               >
                 <div className="relative w-full max-w-sm lg:max-w-lg">
-                  <div className="absolute top-0 -left-4 w-36 h-36 sm:w-72 sm:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                  <div className="absolute top-0 -right-4 w-36 h-36 sm:w-72 sm:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-                  <div className="absolute -bottom-8 left-20 w-36 h-36 sm:w-72 sm:h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+                  <div className="absolute top-0 -left-4 w-36 h-36 sm:w-72 sm:h-72 bg-purple-300 dark:bg-purple-700 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-70 animate-blob"></div>
+                  <div className="absolute top-0 -right-4 w-36 h-36 sm:w-72 sm:h-72 bg-yellow-300 dark:bg-yellow-700 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+                  <div className="absolute -bottom-8 left-20 w-36 h-36 sm:w-72 sm:h-72 bg-pink-300 dark:bg-pink-700 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
                   <div className="relative">
                     <BookOpen className="h-32 w-32 sm:h-64 sm:w-64 text-primary mx-auto" />
                   </div>
