@@ -102,15 +102,14 @@ const SidebarContent: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
     <div className="flex flex-col h-full bg-background">
       <div className="flex-grow p-4">
         <nav className="space-y-2">
-          <Link 
-            href="/"
+          <div 
             className={cn(
-              "flex items-center gap-2 rounded-lg px-3 py-2 text-lg font-semibold transition-colors hover:bg-accent",
-              pathname === "/" ? "bg-accent text-accent-foreground" : "text-primary"
+              "flex items-center gap-2 rounded-lg px-3 py-2 text-lg font-semibold",
+              "text-primary"
             )}
           >
             {collapsed && !isMobile ? "ES" : "EduSync"}
-          </Link>
+          </div>
           <Link 
             href="/planner"
             className={cn(
