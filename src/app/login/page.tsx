@@ -46,10 +46,10 @@ const database = getDatabase(app)
 
 const formSchema = z.object({
   email: z.string().email({
-    message: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    message: "Please enter a valid email address.",
   }),
   password: z.string().min(8, {
-    message: "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    message: "Password must be at least 8 characters long.",
   }),
 })
 
@@ -64,15 +64,15 @@ export default function LoginPage() {
   useEffect(() => {
     setMounted(true)
     
-    // Überprüfen Sie den Authentifizierungsstatus beim Laden der Seite
+    // Check authentication status when the page loads
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Benutzer ist bereits eingeloggt, leiten Sie ihn zur App-Seite weiter
+        // User is already logged in, redirect to the app page
         router.push('./app')
       }
     })
 
-    // Cleanup-Funktion
+    // Cleanup function
     return () => unsubscribe()
   }, [router])
 
@@ -95,11 +95,11 @@ export default function LoginPage() {
     setIsLoading(true)
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password)
-      setFeedbackMessage({ type: 'success', message: "Anmeldung erfolgreich! Sie werden weitergeleitet..." })
+      setFeedbackMessage({ type: 'success', message: "Login successful! You are being redirected..." })
       setTimeout(() => router.push('./app'), 2000)
     } catch (error) {
-      console.error("Anmeldefehler:", error)
-      setFeedbackMessage({ type: 'error', message: "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut." })
+      console.error("Login error:", error)
+      setFeedbackMessage({ type: 'error', message: "Login failed. Please check your credentials and try again." })
     } finally {
       setIsLoading(false)
     }
@@ -118,11 +118,11 @@ export default function LoginPage() {
         photoURL: user.photoURL
       })
 
-      setFeedbackMessage({ type: 'success', message: "Google-Anmeldung erfolgreich! Sie werden weitergeleitet..." })
+      setFeedbackMessage({ type: 'success', message: "Google login successful! You are being redirected..." })
       setTimeout(() => router.push('./app'), 2000)
     } catch (error) {
-      console.error("Google-Anmeldefehler:", error)
-      setFeedbackMessage({ type: 'error', message: "Google-Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut." })
+      console.error("Google login error:", error)
+      setFeedbackMessage({ type: 'error', message: "Google login failed. Please try again." })
     }
   }
 
@@ -135,7 +135,7 @@ export default function LoginPage() {
           <Button
             variant="ghost"
             className="absolute left-4 top-4 p-2"
-            aria-label="Zurück"
+            aria-label="Back"
           >
           <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -144,13 +144,13 @@ export default function LoginPage() {
           variant="ghost"
           className="absolute right-4 top-4 p-2"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label="Theme umschalten"
+          aria-label="Toggle theme"
         >
           {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </Button>
         <CardHeader className="space-y-1 text-center pt-12">
-          <CardTitle className="text-3xl font-bold">Anmelden</CardTitle>
-          <p className="text-muted-foreground">Geben Sie Ihre Anmeldedaten ein, um auf Ihr Konto zuzugreifen</p>
+          <CardTitle className="text-3xl font-bold">Login</CardTitle>
+          <p className="text-muted-foreground">Enter your credentials to access your account</p>
         </CardHeader>
         <CardContent className="space-y-6">
           <AnimatePresence mode="wait">
@@ -178,7 +178,7 @@ export default function LoginPage() {
           </AnimatePresence>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span>Formularfortschritt</span>
+              <span>Form progress</span>
               <span>{Math.round(formProgress)}%</span>
             </div>
             <Progress value={formProgress} className="w-full" />
@@ -206,14 +206,14 @@ export default function LoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            <span>Mit Google anmelden</span>
+            <span>Sign in with Google</span>
           </Button>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Oder fortfahren mit</span>
+              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
           <Form {...form}>
@@ -224,11 +224,11 @@ export default function LoginPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground dark:text-foreground">E-Mail</FormLabel>
+                      <FormLabel className="text-foreground dark:text-foreground">Email</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-                          <Input type="email" placeholder="max@beispiel.de" {...field} className="pl-10 py-2 text-black dark:text-white placeholder:text-muted-foreground" />
+                          <Input type="email" placeholder="john@example.com" {...field} className="pl-10 py-2 text-black dark:text-white placeholder:text-muted-foreground" />
                         </div>
                       </FormControl>
                       <AnimatePresence mode="wait">
@@ -251,7 +251,7 @@ export default function LoginPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground dark:text-foreground">Passwort</FormLabel>
+                      <FormLabel className="text-foreground dark:text-foreground">Password</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
@@ -278,10 +278,10 @@ export default function LoginPage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Bitte warten
+                    Please wait
                   </>
                 ) : (
-                  "Anmelden"
+                  "Login"
                 )}
               </Button>
             </form>
@@ -289,9 +289,9 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 items-center">
           <div className="text-center text-sm text-muted-foreground">
-            Noch kein Konto?{" "}
+            Don't have an account?{" "}
             <Link href="./register" className="text-primary hover:underline font-medium">
-              Registrieren
+              Register
             </Link>
           </div>
         </CardFooter>
