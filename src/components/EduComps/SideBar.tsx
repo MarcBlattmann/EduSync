@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client"
 
 import React, { useState, useEffect } from "react"
@@ -64,7 +63,6 @@ const SidebarContent: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
               photoURL: currentUser.photoURL || data.photoURL
             })
           } else {
-            // If no data in database, use data from Firebase Auth
             setUserData({
               name: currentUser.displayName || '',
               photoURL: currentUser.photoURL
@@ -95,10 +93,10 @@ const SidebarContent: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
   }
 
   if (!user) {
-    return null // or a loading spinner
+    return null
   }
 
-  const sidebarContent = (
+  return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex-grow p-4">
         <nav className="space-y-2">
@@ -181,46 +179,32 @@ const SidebarContent: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
       </div>
     </div>
   )
-
-  if (isMobile) {
-    return sidebarContent
-  }
-
-  return (
-    <Sidebar className={cn("border-r", collapsed ? "w-16" : "w-64")}>
-      {sidebarContent}
-    </Sidebar>
-  )
 }
 
 const SidebarComponent: React.FC = () => {
   return (
-    <SidebarProvider>
-      <div className="md:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="fixed top-4 left-4 z-40">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-64">
-            <SidebarContent isMobile />
-          </SheetContent>
-        </Sheet>
-      </div>
-      <div className="hidden md:block">
-        <SidebarContent />
-      </div>
-    </SidebarProvider>
-  )
-}
-
-const WrappedSidebarComponent: React.FC = () => {
-  return (
-    <div className="h-screen max-w-[300px]">
-      <SidebarComponent />
+    <div className="fixed">
+      <SidebarProvider>
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="absolute top-4 left-4 z-50">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-64 fixed inset-y-0 left-0 z-50">
+              <SidebarContent isMobile />
+            </SheetContent>
+          </Sheet>
+        </div>
+        <div className="hidden md:block">
+          <Sidebar className="border-r w-64">
+            <SidebarContent />
+          </Sidebar>
+        </div>
+      </SidebarProvider>
     </div>
   )
 }
 
-export default WrappedSidebarComponent
+export default SidebarComponent
