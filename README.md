@@ -1,4 +1,4 @@
-![EduSync Logo](https://github.com/user-attachments/assets/13263439-8a1f-42d4-8c77-c3ca1bba585b)
+![EduSync Banner](https://github.com/user-attachments/assets/13263439-8a1f-42d4-8c77-c3ca1bba585b)
 
 # Welcome to EduSync!
 
