@@ -1,3 +1,4 @@
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 import "./globals.css";
 
 export const metadata = {
@@ -7,10 +8,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-      </body>
-    </html>
+    <UserProvider>
+      <html lang="en">
+        <body>
+          {children}
+        </body>
+      </html>
+    </UserProvider>
   );
 }
