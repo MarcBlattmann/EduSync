@@ -1,4 +1,4 @@
-// https://github.com/MarcBlattmann/EduSync/wiki/Code#pagejs
+// https://github.com/MnarcBlattmann/EduSync/wiki/Code#pagejs
 
 "use client";
 import { useUser } from '@auth0/nextjs-auth0/client';
