@@ -1,8 +1,6 @@
 # EduSync (In development) 📚
 > Access 100+ subjects and transform the way you learn
 
-![EduSync Demo](https://via.placeholder.com/600x300)
-
 ## Features ✨
 - **100+ Subjects** - From Math to Literature
 - **Smart Organization** - Keep your studies on track
