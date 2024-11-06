@@ -2,10 +2,10 @@
 > Access 100+ subjects and transform the way you learn
 
 ## Features ✨
-- **100+ Subjects** - From Math to Literature
-- **Smart Organization** - Keep your studies on track
-- **Easy Access** - Web-based, no installation needed
-- **Progress Tracking** - Monitor your improvement
+- **100+ Subjects** - From Math to Literature.
+- **Smart Organization** - Keep your studies on track.
+- **Easy Access** - Web-based, no installation needed.
+- **Progress Tracking** - Monitor your improvement.
 
 ## Quick Start 🚀
 1. Visit [EduSync](https://edusync.info)
