@@ -101,7 +101,7 @@ export default function Login({ searchParams }: { searchParams: any }) {
         {error && <div className="error-message">{error}</div>}
 
         <div className="dont-have-a-acount-button">
-          Don't have an account? <Link href="/signup"><span>Sign up</span></Link>
+          Don't have an account? <Link href="/sign-up"><span>Sign up</span></Link>
         </div>
       </div>
     </div>
