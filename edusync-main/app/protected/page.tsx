@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
+import { signOutAction } from "@/app/actions";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
@@ -14,6 +14,9 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <h1>You are logged in</h1>
+    <>
+      <h1>You are logged in</h1>
+      <button onClick={signOutAction}>Sign out</button>
+    </>
   );
 }
