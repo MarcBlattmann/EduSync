@@ -6,14 +6,24 @@ import GoogleLogo from "@/assets/logos/google-logo.svg";
 import Link from "next/link";
 import Image from 'next/image';
 import { createClient } from "@/utils/supabase/client";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import "./page.css";
 
-export default function Login({ searchParams }: { searchParams: any }) {
+export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const filteredParams = new URLSearchParams(searchParams.toString());
+  filteredParams.delete('NEXT_REDIRECT');
+  const message = filteredParams.get('success') || null;
+  let errorMessage = filteredParams.get('error') || null;
+
+  // Ensure NEXT_REDIRECT is not shown as an error message
+  if (errorMessage === 'NEXT_REDIRECT') {
+    errorMessage = null;
+  }
 
   const handleGoogleLogin = async () => {
     try {
@@ -62,7 +72,11 @@ export default function Login({ searchParams }: { searchParams: any }) {
         <h1 className="title">Welcome back!</h1>
         <h4 className="subtitle">Please enter your details</h4>
 
-        <form action={handleEmailSubmit}>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          handleEmailSubmit(formData);
+        }}>
           <input 
             type="email" 
             required 
@@ -98,7 +112,11 @@ export default function Login({ searchParams }: { searchParams: any }) {
           {loading ? 'Connecting...' : 'Login with Google'}
         </button>
 
-        {error && <div className="error-message">{error}</div>}
+        {errorMessage ? (
+          <div className="message" id="error">{errorMessage}</div>
+        ) : (
+          message && <div className="message" id="success">{message}</div>
+        )}
 
         <div className="dont-have-a-acount-button">
           Don't have an account? <Link href="/sign-up"><span>Sign up</span></Link>
