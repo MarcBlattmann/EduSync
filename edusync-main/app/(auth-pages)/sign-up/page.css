@@ -28,7 +28,7 @@
   .title {
     margin: 0;
     font-size: 5vh;
-    letter-spacing: 5px;
+    letter-spacing: 3px;
   }
   
   .subtitle {
@@ -125,7 +125,7 @@
     background-color: rgba(228, 0, 0, 0.166);
   }
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1300px) {
     .illustration-container {
       display: none;
     }
