@@ -63,23 +63,6 @@
     margin-bottom: 2vh;
   }
   
-  .remember-me {
-    display: flex;
-    align-items: center;
-    font-size: 1.5vh;
-    gap: 0.5vh;
-  }
-  
-  .remember-me input {
-    cursor: pointer;
-  }
-  
-  .forgot-password {
-    font-size: 1.5vh;
-    color: rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-  }
-  
   .login-button {
     all: unset;
     width: 70%;
@@ -107,6 +90,7 @@
   }
   
   .main {
+    margin-top: 4vh;
     padding: 1.2vh 0;
     background-color: var(--primary-color);
     color: var(--white-color);
