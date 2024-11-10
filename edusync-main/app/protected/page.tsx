@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { signOutAction } from "@/app/actions";
+import { Children } from "react";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
