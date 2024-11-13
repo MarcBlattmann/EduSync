@@ -17,5 +17,5 @@
 Founded by Marc with a simple belief: getting good grades should be straightforward with the right tools. That's why we built EduSync - to make learning smarter and better organized.
 
 ---
-Made with ❤️ by the EduSync team
+Made with ❤️ by the EduSync team.
 
