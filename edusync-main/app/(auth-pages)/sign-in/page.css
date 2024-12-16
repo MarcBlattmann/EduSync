@@ -1,117 +1,117 @@
 .main-container {
     display: flex;
-  }
-  
-  .illustration-container {
+}
+
+.illustration-container {
     display: flex;
-    width: 60vw;
+    width: 85vw;
     height: 100vh;
     background-color: var(--light-color);
-  }
-  
-  .login-container {
+}
+
+.login-container {
     display: flex;
     flex-direction: column;
-    width: 40vw;
+    width: 30vw;
     height: 100vh;
     justify-content: center;
     align-items: center;
     font-family: Roboto;
-  }
-  
-  .logo {
-    height: 7vh;
+}
+
+.logo {
+    height: 70px;
     display: flex;
-    margin: 6vh;
-  }
-  
-  .title {
+    margin: 60px;
+}
+
+.title {
     margin: 0;
-    font-size: 5vh;
+    font-size: 48px;
     letter-spacing: 3px;
-  }
-  
-  .subtitle {
-    margin: 1vh;
-    font-size: 1.5vh;
+}
+
+.subtitle {
+    margin: 10px;
+    font-size: 16px;
     font-weight: 400;
     color: var(--primary-color);
-  }
-  
-  form {
+}
+
+form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-  }
-  
-  .input {
+}
+
+.input {
     all: unset;
     width: 70%;
-    padding: 1.5vh 0;
+    padding: 15px 0;
     border-bottom: 2px solid rgba(0, 0, 0, 0.75);
-    margin-top: 3vh;
+    margin-top: 30px;
     color: black;
-    font-size: 1.7vh;
-  }
-  
-  .mini-menu-container {
+    font-size: 16px;
+}
+
+.mini-menu-container {
     display: flex;
     justify-content: space-between;
     width: 70%;
-    margin-top: 3vh;
-    margin-bottom: 2vh;
-  }
-  
-  .login-button {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.login-button {
     all: unset;
     width: 70%;
-    font-size: 2vh;
+    font-size: 20px;
     font-weight: 500;
-    margin-top: 2vh;
+    margin-top: 20px;
     color: white;
     text-align: center;
     cursor: pointer;
-    border-radius: 50vh;
+    border-radius: 999px;
     display: flex;
     justify-content: center;
-    gap: 2vh;
+    gap: 20px;
     align-items: center;
-  }
-  
-  .login-button img {
-    height: 3vh;
-  }
-  
-  .secondary {
+}
+
+.login-button img {
+    height: 30px;
+}
+
+.secondary {
     background-color: var(--light-color);
     color: black;
-    padding: 1vh 0;
-  }
-  
-  .main {
-    margin-top: 4vh;
-    padding: 1.2vh 0;
+    padding: 10px 0;
+}
+
+.main {
+    margin-top: 40px;
+    padding: 12px 0;
     background-color: var(--primary-color);
     color: var(--white-color);
-  }
-  
-  .dont-have-a-acount-button {
-    margin-top: 20vh;
-    font-size: 1.5vh;
-  }
-  
-  .dont-have-a-acount-button span {
+}
+
+.dont-have-a-acount-button {
+    margin-top: 200px;
+    font-size: 16px;
+}
+
+.dont-have-a-acount-button span {
     color: var(--primary-color);
     cursor: pointer;
-  }
-  
-  @media screen and (max-width: 1300px) {
+}
+
+@media screen and (max-width: 1300px) {
     .illustration-container {
-      display: none;
+        display: none;
     }
     
     .login-container {
-      width: 100vw; /* Take full width when illustration-container is hidden */
+        width: 100%;
     }
-  }
+}
