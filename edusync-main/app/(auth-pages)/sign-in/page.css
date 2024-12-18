@@ -106,6 +106,35 @@ form {
     cursor: pointer;
 }
 
+/* Message Styling */
+.message {
+    width: 70%;
+    margin-top: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+}
+
+#error {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+#success {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 @media screen and (max-width: 1300px) {
     .illustration-container {
         display: none;

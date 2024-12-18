@@ -1,0 +1,10 @@
+.protected-layout {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.protected-content {
+  padding: 90px 24px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}

@@ -1,0 +1,29 @@
+.search-container {
+  position: relative;
+  width: 300px;
+  z-index: 1000;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.search-input {
+  all: unset;
+  width: 100%;
+  padding: 12px 20px 12px 48px;
+  background-color: var(--light-color);
+  border-radius: 999px;
+  font-size: 16px;
+  color: black;
+}
+
+.search-input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
