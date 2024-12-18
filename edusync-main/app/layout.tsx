@@ -1,6 +1,7 @@
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,7 +20,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SnackbarProvider>
+          {children}
+        </SnackbarProvider>
+      </body>
     </html>
   );
 }

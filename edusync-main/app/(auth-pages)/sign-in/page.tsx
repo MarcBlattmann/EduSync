@@ -7,23 +7,30 @@ import Link from "next/link";
 import Image from 'next/image';
 import { createClient } from "@/utils/supabase/client";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSnackbar } from '@/context/SnackbarContext';
 import "./page.css";
 
 export default function Login() {
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
-  const filteredParams = new URLSearchParams(searchParams.toString());
-  filteredParams.delete('NEXT_REDIRECT');
-  const message = filteredParams.get('success') || null;
-  let errorMessage = filteredParams.get('error') || null;
 
-  // Ensure NEXT_REDIRECT is not shown as an error message
-  if (errorMessage === 'NEXT_REDIRECT') {
-    errorMessage = null;
-  }
+  useEffect(() => {
+    const error = searchParams.get('error');
+    const success = searchParams.get('success');
+    
+    const timeoutId = setTimeout(() => {
+      if (error) {
+        showSnackbar(error, 'error');
+      } else if (success) {
+        showSnackbar(success, 'success');
+      }
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchParams, showSnackbar]); // Add searchParams to dependency array
 
   const handleGoogleLogin = async () => {
     try {
@@ -35,9 +42,11 @@ export default function Login() {
           redirectTo: `${window.location.origin}/auth/callback?next=/app`
         }
       });
-      if (error) throw error;
+      if (error) {
+        showSnackbar(error.message, 'error');
+      }
     } catch (err: any) {
-      setError(err.message);
+      showSnackbar(err.message, 'error');
     } finally {
       setLoading(false);
     }
@@ -46,15 +55,15 @@ export default function Login() {
   const handleEmailSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      setError(null);
       const result = await signInAction(formData);
       if (result?.error) {
-        setError(result.error);
+        showSnackbar(result.error, 'error');
       } else {
+        showSnackbar('Successfully signed in!', 'success');
         router.push('/app');
       }
     } catch (err: any) {
-      setError(err.message);
+      showSnackbar(err.message, 'error');
     } finally {
       setLoading(false);
     }
@@ -77,7 +86,7 @@ export default function Login() {
           const formData = new FormData(e.currentTarget);
           handleEmailSubmit(formData);
         }}>
-          <input 
+          <input
             type="email" 
             required 
             name="email" 
@@ -111,12 +120,6 @@ export default function Login() {
           <Image alt="Google Logo" src={GoogleLogo} /> 
           {loading ? 'Connecting...' : 'Login with Google'}
         </button>
-
-        {errorMessage ? (
-          <div className="message" id="error">{errorMessage}</div>
-        ) : (
-          message && <div className="message" id="success">{message}</div>
-        )}
 
         <div className="dont-have-a-acount-button">
           Don't have an account? <Link href="/sign-up"><span>Sign up</span></Link>
