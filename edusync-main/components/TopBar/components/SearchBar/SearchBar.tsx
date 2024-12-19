@@ -11,15 +11,6 @@ interface SearchSuggestion {
   category: string;
 }
 
-const initialSuggestions = [
-  { title: 'React Basics', category: 'React' },
-  { title: 'JavaScript Fundamentals', category: 'JavaScript' },
-  { title: 'CSS Layouts', category: 'CSS' },
-  { title: 'React Hooks', category: 'React' },
-  { title: 'TypeScript Tutorial', category: 'TypeScript' },
-  { title: 'Next.js Introduction', category: 'Next.js' }
-];
-
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
@@ -47,16 +38,6 @@ export default function SearchBar() {
 
         if (checkError) {
           throw new Error(`Failed to check existing data: ${checkError.message}`);
-        }
-
-        if (!existingData || existingData.count === 0) {
-          const { error: insertError } = await supabase.current
-            .from('search_suggestions')
-            .insert(initialSuggestions);
-
-          if (insertError) {
-            throw new Error(`Failed to insert initial data: ${insertError.message}`);
-          }
         }
       } catch (error: any) {
         showSnackbar('Failed to initialize search suggestions', 'error');
