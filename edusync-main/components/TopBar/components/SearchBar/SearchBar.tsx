@@ -1,32 +1,96 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { useSnackbar } from '@/context/SnackbarContext';
 import './SearchBar.css';
 
-// Mock data - replace with actual data source later
-const mockSuggestions = [
-  'React Basics',
-  'JavaScript Fundamentals',
-  'CSS Layouts',
-  'React Hooks',
-  'TypeScript Tutorial',
-  'Next.js Introduction'
+interface SearchSuggestion {
+  id: string;
+  title: string;
+  category: string;
+}
+
+const initialSuggestions = [
+  { title: 'React Basics', category: 'React' },
+  { title: 'JavaScript Fundamentals', category: 'JavaScript' },
+  { title: 'CSS Layouts', category: 'CSS' },
+  { title: 'React Hooks', category: 'React' },
+  { title: 'TypeScript Tutorial', category: 'TypeScript' },
+  { title: 'Next.js Introduction', category: 'Next.js' }
 ];
 
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const supabase = useRef(createClient());
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const filtered = mockSuggestions.filter(item =>
-      item.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setSuggestions(filtered);
-    setSelectedIndex(-1);
-  }, [searchQuery]);
+    const initializeSearchData = async () => {
+      try {
+        // Check if user is authenticated
+        const { data: { session } } = await supabase.current.auth.getSession();
+        
+        if (!session) {
+          return;
+        }
+
+        // Check if data exists
+        const { data: existingData, error: checkError } = await supabase.current
+          .from('search_suggestions')
+          .select('count')
+          .single();
+
+        if (checkError) {
+          throw new Error(`Failed to check existing data: ${checkError.message}`);
+        }
+
+        if (!existingData || existingData.count === 0) {
+          const { error: insertError } = await supabase.current
+            .from('search_suggestions')
+            .insert(initialSuggestions);
+
+          if (insertError) {
+            throw new Error(`Failed to insert initial data: ${insertError.message}`);
+          }
+        }
+      } catch (error: any) {
+        showSnackbar('Failed to initialize search suggestions', 'error');
+        console.error('Search initialization error:', error.message);
+      }
+    };
+
+    initializeSearchData();
+  }, [showSnackbar]);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.length > 0) {
+        const { data, error } = await supabase.current
+          .from('search_suggestions')
+          .select('*')
+          .ilike('title', `%${searchQuery}%`)
+          .limit(5);
+
+        if (error) {
+          showSnackbar('Failed to fetch search suggestions', 'error');
+          setSuggestions([]);
+          return;
+        }
+
+        setSuggestions(data || []);
+        setSelectedIndex(-1);
+      } else {
+        setSuggestions([]);
+      }
+    };
+
+    fetchSuggestions();
+  }, [searchQuery, showSnackbar]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,7 +111,7 @@ export default function SearchBar() {
       e.preventDefault();
       setSelectedIndex(prev => Math.max(prev - 1, -1));
     } else if (e.key === 'Enter' && selectedIndex >= 0) {
-      setSearchQuery(suggestions[selectedIndex]);
+      setSearchQuery(suggestions[selectedIndex].title);
       setShowSuggestions(false);
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
@@ -76,14 +140,15 @@ export default function SearchBar() {
         <div className="suggestions-dropdown">
           {suggestions.map((suggestion, index) => (
             <div
-              key={suggestion}
+              key={suggestion.id}
               className={`suggestion-item ${index === selectedIndex ? 'selected' : ''}`}
               onClick={() => {
-                setSearchQuery(suggestion);
+                setSearchQuery(suggestion.title);
                 setShowSuggestions(false);
               }}
             >
-              {suggestion}
+              <span>{suggestion.title}</span>
+              <span className="suggestion-category">{suggestion.category}</span>
             </div>
           ))}
         </div>
