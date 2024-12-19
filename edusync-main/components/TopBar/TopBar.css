@@ -28,7 +28,6 @@
 .right-section {
   display: flex;
   align-items: center;
-  gap: 64px;
 }
 
 .topbar-logo {
