@@ -3,14 +3,14 @@
   display: flex;
   align-items: center;
   z-index: 1000;
-  width: 200px; /* Reduced width */
+  width: 150px; /* 75% of 200px */
 }
 
 .search-icon {
   position: absolute;
-  left: 8px; /* Reduced from 12px */
-  width: 16px; /* Smaller icon */
-  height: 16px;
+  left: 6px; /* 75% of 8px */
+  width: 12px; /* 75% of 16px */
+  height: 12px; /* 75% of 16px */
   color: var(--primary-color);
   z-index: 1;
 }
@@ -18,11 +18,11 @@
 .search-input {
   all: unset;
   width: 100%;
-  padding: 8px 12px 8px 32px; /* Reduced padding */
+  padding: 6px 9px 6px 24px; /* 75% of original padding */
   background-color: var(--light-color);
   border: 2px solid var(--light-color);
   border-radius: 999px;
-  font-size: 14px; /* Smaller font */
+  font-size: 10.5px; /* 75% of 14px */
   font-family: Roboto, sans-serif;
   color: black;
   outline: none;
@@ -40,49 +40,49 @@
 
 .suggestions-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px); /* 75% of 8px */
   left: 0;
   right: 0;
-  margin-top: 4px;
+  margin-top: 3px; /* 75% of 4px */
   background: var(--white-color);
-  border: 2px solid var(--light-color);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(2, 43, 58, 0.08);
-  max-height: 300px;
+  border: 1.5px solid var(--light-color);  /* reduced from 2px */
+  border-radius: 6px;                      /* reduced to match other dropdowns */
+  box-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.15); /* match profile dropdown shadow */
+  max-height: 225px; /* 75% of 300px */
   overflow-y: auto;
   z-index: 1000;
+  padding: 4px;                            /* add padding like profile dropdown */
 }
 
 .suggestion-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 7px 10px;                       /* match profile dropdown padding */
   cursor: pointer;
   font-family: Roboto, sans-serif;
   transition: all 0.2s ease;
+  font-size: 12px;                         /* match profile dropdown font size */
+  border-radius: 4px;                      /* match profile dropdown item radius */
 }
 
 .suggestion-item:hover,
 .suggestion-item.selected {
   background-color: var(--light-color);
   color: var(--primary-color);
+  border-radius: 4px;                      /* ensure radius on hover */
 }
 
-.suggestion-item:first-child {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
+/* Remove these since we're using consistent border radius now */
+.suggestion-item:first-child,
 .suggestion-item:last-child {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 4px;
 }
 
 .suggestion-category {
-  font-size: 12px;
+  font-size: 9px; /* 75% of 12px */
   color: var(--secondary-color);
   background-color: var(--light-color);
-  padding: 2px 8px;
-  border-radius: 12px;
+  padding: 1.5px 6px; /* 75% of 2px 8px */
+  border-radius: 6px;                      /* reduced to match overall style */
 }

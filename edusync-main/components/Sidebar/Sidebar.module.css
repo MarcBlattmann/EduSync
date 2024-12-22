@@ -1,12 +1,11 @@
 .sidebar {
-  width: 250px;
+  width: 187.5px;     /* 75% of 250px */
   height: 100vh;
   background-color: var(--white-color);
   position: fixed;
-  top: 64px;
+  top: 48px;          /* 75% of 64px */
   left: 0;
-  padding-top: 20px;
-  /* Remove the border-right since we'll use shadow instead */
+  padding-top: 15px;  /* 75% of 20px */
 }
 
 .sidebar::after {
@@ -15,7 +14,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 4px;
+  width: 3px;         /* 75% of 4px */
   box-shadow: 2px 0 4px rgba(0,0,0,0.1);
   clip-path: inset(0 -5px 0 0);
   pointer-events: none;
@@ -24,13 +23,13 @@
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 0 16px;
+  gap: 6px;           /* 75% of 8px */
+  padding: 0 12px;    /* 75% of 16px */
 }
 
 .navItem {
-  padding: 12px 16px;
-  border-radius: 8px;
+  padding: 9px 12px;  /* 75% of 12px 16px */
+  border-radius: 6px; /* 75% of 8px */
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
