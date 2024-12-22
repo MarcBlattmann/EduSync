@@ -1,0 +1,42 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: var(--white-color);
+  position: fixed;
+  top: 64px;
+  left: 0;
+  padding-top: 20px;
+  /* Remove the border-right since we'll use shadow instead */
+}
+
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+  clip-path: inset(0 -5px 0 0);
+  pointer-events: none;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.navItem {
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.navItem:hover {
+  background-color: var(--light-color);
+}
