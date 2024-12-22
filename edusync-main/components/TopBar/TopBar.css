@@ -5,12 +5,24 @@
   right: 0;
   height: 70px;
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: none;
+  position: relative;
   z-index: 1000;
 }
 
+.topbar::after {
+  content: '';
+  position: absolute;
+  left: 250px; /* Width of the sidebar */
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  clip-path: inset(0 0 -4px 0);
+  pointer-events: none;
+}
+
 .topbar-content {
-  max-width: 1400px;
   margin: 0 auto;
   height: 100%;
   display: flex;
