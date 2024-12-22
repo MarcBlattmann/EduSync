@@ -39,3 +39,9 @@
 .navItem:hover {
   background-color: var(--light-color);
 }
+
+.navItem.active {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+  font-weight: 500;  /* Changed from 600 to 500 */
+}
