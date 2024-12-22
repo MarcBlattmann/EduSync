@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 52.5px;  /* 75% of 70px */
   background-color: white;
   box-shadow: none;
   position: relative;
@@ -13,10 +13,10 @@
 .topbar::after {
   content: '';
   position: absolute;
-  left: 250px; /* Width of the sidebar */
+  left: 187.5px;  /* 75% of 250px */
   right: 0;
   bottom: 0;
-  height: 4px;
+  height: 3px;    /* 75% of 4px */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   clip-path: inset(0 0 -4px 0);
   pointer-events: none;
@@ -28,13 +28,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 18px;  /* 75% of 24px */
 }
 
 .left-section {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 9px;  /* 75% of 12px */
 }
 
 .right-section {
@@ -43,39 +43,39 @@
 }
 
 .topbar-logo {
-  height: 40px;
+  height: 30px;  /* 75% of 40px */
   width: auto;
 }
 
 .brand-text {
-  font-size: 24px;
+  font-size: 18px;  /* 75% of 24px */
   font-weight: 600;
   color: var(--primary-color);
 }
 
 .search-container {
   position: relative;
-  width: 300px;
+  width: 225px;  /* 75% of 300px */
   z-index: 1000;
 }
 
 .search-icon {
   position: absolute;
-  left: 16px;
+  left: 12px;    /* 75% of 16px */
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 15px;   /* 75% of 20px */
+  height: 15px;  /* 75% of 20px */
   color: rgba(0, 0, 0, 0.5);
 }
 
 .search-input {
   all: unset;
   width: 100%;
-  padding: 12px 20px 12px 50px;
+  padding: 9px 15px 9px 37.5px;  /* 75% of original padding */
   background-color: var(--light-color);
   border-radius: 999px;
-  font-size: 16px;
+  font-size: 12px;  /* 75% of 16px */
   color: black;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .profile-section {
-  margin-left: 16px;
+  margin-left: 12px;  /* 75% of 16px */
   z-index: 1001;
   position: relative;
 }
@@ -93,8 +93,8 @@
   position: relative;
   all: unset;
   cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 30px;  /* 75% of 40px */
+  width: 30px;   /* 75% of 40px */
   border-radius: 50%;
   background-color: var(--primary-color);
   display: flex;
@@ -110,7 +110,7 @@
 .profile-avatar {
   color: white;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 12px;  /* 75% of 16px */
   text-transform: uppercase;
   line-height: 1;
   display: flex;
@@ -121,19 +121,20 @@
 }
 
 .profile-icon {
-  width: 24px;
-  height: 24px;
+  width: 18px;   /* 75% of 24px */
+  height: 18px;  /* 75% of 24px */
   color: var(--primary-color);
 }
 
 .profile-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);  /* already at 75% */
   right: 0;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  min-width: 180px;
+  border-radius: 6px;     /* already at 75% */
+  box-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.15); /* reduced shadow size */
+  min-width: 135px;       /* already at 75% */
+  padding: 4px;          /* add small padding */
   z-index: 1002;
 }
 
@@ -141,21 +142,23 @@
   all: unset;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: 6px;              /* 75% of 8px */
+  padding: 7px 10px;     /* slightly reduce padding */
   width: 100%;
   box-sizing: border-box;
   cursor: pointer;
   color: #dc2626;
   transition: background-color 0.2s ease;
+  font-size: 12px;       /* add 75% font size */
+  border-radius: 4px;    /* add smaller radius for inner items */
 }
 
 .dropdown-item:hover {
   background-color: #fee2e2;
-  border-radius: 8px;
+  border-radius: 4px;    /* match the new radius */
 }
 
 .dropdown-icon {
-  width: 20px;
-  height: 20px;
+  width: 15px;   /* 75% of 20px */
+  height: 15px;  /* 75% of 20px */
 }
