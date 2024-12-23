@@ -13,7 +13,7 @@
 .topbar::after {
   content: '';
   position: absolute;
-  left: 187.5px;  /* 75% of 250px */
+  left: 180px;  /* increased from 165px */
   right: 0;
   bottom: 0;
   height: 3px;    /* 75% of 4px */
@@ -55,7 +55,7 @@
 
 .search-container {
   position: relative;
-  width: 225px;  /* 75% of 300px */
+  width: 247.5px;  /* increased from 225px */
   z-index: 1000;
 }
 
@@ -64,18 +64,18 @@
   left: 12px;    /* 75% of 16px */
   top: 50%;
   transform: translateY(-50%);
-  width: 15px;   /* 75% of 20px */
-  height: 15px;  /* 75% of 20px */
+  width: 16.5px;   /* increased from 15px */
+  height: 16.5px;  /* increased from 15px */
   color: rgba(0, 0, 0, 0.5);
 }
 
 .search-input {
   all: unset;
   width: 100%;
-  padding: 9px 15px 9px 37.5px;  /* 75% of original padding */
+  padding: 9.9px 16.5px 9.9px 41.25px;  /* increased from 9px 15px 9px 37.5px */
   background-color: var(--light-color);
   border-radius: 999px;
-  font-size: 12px;  /* 75% of 16px */
+  font-size: 13.2px;  /* increased from 12px */
   color: black;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .profile-section {
-  margin-left: 12px;  /* 75% of 16px */
+  margin-left: 13.2px;  /* increased from 12px */
   z-index: 1001;
   position: relative;
 }
@@ -93,8 +93,8 @@
   position: relative;
   all: unset;
   cursor: pointer;
-  height: 30px;  /* 75% of 40px */
-  width: 30px;   /* 75% of 40px */
+  height: 33px;  /* increased from 30px */
+  width: 33px;   /* increased from 30px */
   border-radius: 50%;
   background-color: var(--primary-color);
   display: flex;
@@ -121,8 +121,8 @@
 }
 
 .profile-icon {
-  width: 18px;   /* 75% of 24px */
-  height: 18px;  /* 75% of 24px */
+  width: 19.8px;   /* increased from 18px */
+  height: 19.8px;  /* increased from 18px */
   color: var(--primary-color);
 }
 

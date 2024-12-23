@@ -6,8 +6,8 @@
   position: relative;
   all: unset;
   cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 33px; /* increased from 30px */
+  width: 33px; /* increased from 30px */
   border-radius: 50%;
   background-color: var(--primary-color);
   display: flex;
@@ -23,7 +23,7 @@
 .profile-avatar {
   color: white;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 13.2px; /* increased from 12px */
   text-transform: uppercase;
   line-height: 1;
   display: flex;
@@ -40,7 +40,7 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  min-width: 180px;
+  min-width: 148.5px; /* increased from 135px */
   z-index: 1002;
 }
 
@@ -48,8 +48,8 @@
   all: unset;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: 6.6px; /* increased from 6px */
+  padding: 7.7px 11px; /* increased from 7px 10px */
   width: 100%;
   box-sizing: border-box;
   cursor: pointer;
@@ -62,6 +62,6 @@
 }
 
 .dropdown-icon {
-  width: 20px;
-  height: 20px;
+  width: 16.5px; /* increased from 15px */
+  height: 16.5px; /* increased from 15px */
 }
