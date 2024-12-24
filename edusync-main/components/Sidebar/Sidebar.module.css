@@ -1,11 +1,11 @@
 .sidebar {
-  width: 180px;     /* increased from 165px */
+  width: 180px;
   height: 100vh;
   background-color: var(--white-color);
   position: fixed;
-  top: 48px;          /* 75% of 64px */
+  top: 48px;
   left: 0;
-  padding-top: 15px;  /* 75% of 20px */
+  padding-top: 15px;
 }
 
 .sidebar::after {
@@ -14,7 +14,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 3px;         /* 75% of 4px */
+  width: 3px;
   box-shadow: 2px 0 4px rgba(0,0,0,0.1);
   clip-path: inset(0 -5px 0 0);
   pointer-events: none;
@@ -23,18 +23,18 @@
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;           /* 75% of 8px */
-  padding: 0 12px;    /* increased from 9px */
+  gap: 6px;
+  padding: 0 12px;
 }
 
 .navItem {
-  padding: 9px 12px;  /* increased from 7.5px 9px */
-  border-radius: 6px; /* 75% of 8px */
+  padding: 9px 12px;
+  border-radius: 6px;
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
   transition: background-color 0.2s;
-  font-size: 14px;    /* increased from 13px */
+  font-size: 14px;
 }
 
 .navItem:hover {
@@ -44,5 +44,5 @@
 .navItem.active {
   background-color: var(--light-color);
   color: var(--primary-color);
-  font-weight: 500;  /* Changed from 600 to 500 */
+  font-weight: 500;
 }
