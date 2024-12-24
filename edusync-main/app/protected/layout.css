@@ -4,13 +4,10 @@
 }
 
 .protected-content {
-  padding: 90px 24px 24px 274px; /* Added left padding to account for sidebar */
-  max-width: 1400px;
+  padding-left: 100px; /* Added left padding to account for sidebar */
   margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  .protected-content {
-    padding-left: 24px; /* Reset padding on mobile */
-  }
+h1{
+  font-size: 25px;
 }

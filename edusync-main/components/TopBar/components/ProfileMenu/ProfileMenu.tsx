@@ -1,12 +1,32 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
 import { signOutAction } from "@/app/actions";
 import './ProfileMenu.css';
 
 export default function ProfileMenu() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userInitials, setUserInitials] = useState('');
   const profileRef = useRef<HTMLDivElement>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        const initials = user.email
+          .split('@')[0]
+          .match(/(?:^|\s)([a-zA-Z])/g)
+          ?.map(initial => initial.trim().toUpperCase())
+          ?.slice(0, 2)
+          ?.join('') || user.email.substring(0, 2).toUpperCase();
+        setUserInitials(initials);
+      }
+    };
+    
+    getUser();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -22,7 +42,7 @@ export default function ProfileMenu() {
   return (
     <div className="profile-section" ref={profileRef}>
       <button className="profile-button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-        <div className="profile-avatar">MB</div>
+        <div className="profile-avatar">{userInitials}</div>
       </button>
       {isDropdownOpen && (
         <div className="profile-dropdown">
