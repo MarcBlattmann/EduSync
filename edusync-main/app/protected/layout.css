@@ -1,13 +1,16 @@
 .protected-layout {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background-color: #f8f9fa;
 }
 
 .protected-content {
   margin: 0 auto;
   margin-left: 200px;
+  margin-top: 70px;
 }
 
 h1 {
   font-size: 25px;
+  margin-top: 0px;
 }

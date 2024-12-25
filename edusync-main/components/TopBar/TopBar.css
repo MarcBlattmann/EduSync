@@ -1,12 +1,11 @@
 .topbar {
-  position: fixed;
+  position:fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 52.5px;  /* 75% of 70px */
   background-color: white;
   box-shadow: none;
-  position: relative;
   z-index: 1000;
 }
 

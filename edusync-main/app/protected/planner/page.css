@@ -1,0 +1,310 @@
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.planner {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 15px;
+  box-sizing: border-box;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+.planner h1 {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.add-item-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: var(--white-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-item-form input,
+.add-item-form select {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--light-color);
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: var(--white-color);
+  color: var(--primary-color);
+}
+
+.add-item-form input:focus,
+.add-item-form select:focus {
+  border-color: var(--secondary-color);
+}
+
+.add-item-form button {
+  padding: 6px 12px;
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.add-item-form button:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.calendar {
+  background-color: var(--white-color);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.calendar h2 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px; /* Increased gap between cells */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px; /* Added padding around the grid */
+}
+
+.calendar-day-header {
+  padding: 6px;
+  text-align: center;
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 11px;
+}
+
+.calendar-day {
+  position: relative;
+  background-color: var(--light-color);
+  min-height: 90px; /* Reduced from 100px */
+  height: 110px; /* Reduced from 120px */
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 11px;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.calendar-day.empty {
+  background-color: transparent;
+}
+
+.day-number {
+  position: relative;
+  display: block;
+  text-align: left;
+  margin-bottom: 2px;
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 11px;
+  z-index: 3;
+  pointer-events: none;
+  background-color: var(--light-color);
+}
+
+.calendar-item {
+  position: relative;
+  margin-top: 2px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: calc(100% - 6px);
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.calendar-item:hover {
+  transform: none;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.calendar-item.dragging {
+  opacity: 0.8;
+  transform: none;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.calendar-day.drag-over {
+  background-color: var(--tertiary-color);
+}
+
+.delete-button {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.calendar-item:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.calendar-item.homework {
+  background-color: var(--tertiary-color);
+  color: var(--primary-color);
+}
+
+.calendar-item.exam {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.calendar-item.presentation {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+}
+
+.calendar-item.other {
+  background-color: #8E8E8E;  /* Grey color for other items */
+  color: var(--white-color);
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--light-color);
+  border: none;
+  color: var(--primary-color);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.month-nav:hover {
+  background-color: var(--tertiary-color);
+  transform: translateY(-1px);
+}
+
+.month-nav svg {
+  transition: transform 0.2s ease;
+}
+
+.month-nav:hover svg {
+  transform: scale(1.1);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--white-color);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal h3 {
+  color: var(--primary-color);
+  margin: 0 0 15px 0;
+}
+
+.modal input,
+.modal select {
+  padding: 8px;
+  border: 1px solid var(--light-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+}
+
+.modal-buttons button[type="button"] {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+}
+
+.modal-buttons button:hover {
+  transform: translateY(-1px);
+}
