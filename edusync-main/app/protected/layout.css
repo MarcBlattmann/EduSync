@@ -4,10 +4,10 @@
 }
 
 .protected-content {
-  padding-left: 100px; /* Added left padding to account for sidebar */
   margin: 0 auto;
+  margin-left: 200px;
 }
 
-h1{
+h1 {
   font-size: 25px;
 }

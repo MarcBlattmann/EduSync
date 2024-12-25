@@ -17,8 +17,8 @@ export default async function ProtectedPage() {
 
   return (
     <>
-      <Sidebar /> {/* Add Sidebar component */}
-      <div className="protected-content">
+      <Sidebar />
+      <div>
         <h1 className="WelcomeText">Welcome, {user.email.split('@')[0]}</h1>
       </div>
     </>

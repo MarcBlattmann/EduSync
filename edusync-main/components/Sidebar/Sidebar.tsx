@@ -17,14 +17,14 @@ export default function Sidebar() {
         </Link>
 
         <Link 
-            href="/app/courses" 
+            href="/protected/planner" 
             className={`${styles.navItem} ${pathname === '/app/courses' ? styles.active : ''}`}
           >
             Planner
         </Link>
 
         <Link 
-            href="/app/courses" 
+            href="/protected/EducationTree" 
             className={`${styles.navItem} ${pathname === '/app/courses' ? styles.active : ''}`}
           >
             Education Tree
