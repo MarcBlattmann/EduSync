@@ -145,13 +145,17 @@ const Planner: React.FC = () => {
     if (!result.destination) return;
 
     const itemId = parseInt(result.draggableId);
-    // Use the droppableId directly as it's already in the correct format
     const destinationDate = result.destination.droppableId;
+    const destinationItems = getItemsForDay(
+      parseInt(destinationDate.split('-')[2]), // day
+      parseInt(destinationDate.split('-')[1]) - 1, // month
+      parseInt(destinationDate.split('-')[0]) // year
+    );
 
     const itemToMove = items.find(item => item.id === itemId);
     if (!itemToMove) return;
 
-    // Update optimistically with the exact date string
+    // Update optimistically
     const updatedItems = items.map(item => 
       item.id === itemId ? { ...item, date: destinationDate } : item
     );
@@ -160,7 +164,7 @@ const Planner: React.FC = () => {
     try {
       const { error } = await supabase
         .from('planner_items')
-        .update({ date: destinationDate })
+        .update({ date: destinationDate }) // Remove position field
         .eq('id', itemId);
 
       if (error) throw error;
@@ -310,7 +314,7 @@ const Planner: React.FC = () => {
               const paddedMonth = (currentMonth + 1).toString().padStart(2, '0');
               const paddedDay = day.toString().padStart(2, '0');
               const dayDate = `${currentYear}-${paddedMonth}-${paddedDay}`;
-              
+              const dayItems = getItemsForDay(day, currentMonth, currentYear);
               return (
                 <Droppable droppableId={dayDate} key={`day-${day}`}>
                   {(provided) => (
@@ -318,38 +322,54 @@ const Planner: React.FC = () => {
                       className="calendar-day"
                       ref={provided.innerRef}
                       {...provided.droppableProps}
+                      data-has-items={dayItems.length > 0}
                     >
                       <span className="day-number">{day}</span>
-                      {getItemsForDay(day, currentMonth, currentYear).map((item, index) => (
+                      {dayItems.map((item, index) => (
                         <Draggable
                           key={item.id}
                           draggableId={item.id.toString()}
                           index={index}
                         >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className={`calendar-item ${item.type} ${snapshot.isDragging ? 'dragging' : ''}`}
-                              onClick={(e) => {
-                                if (!snapshot.isDragging) {
-                                  setEditingItem(item);
-                                }
-                              }}
-                            >
-                              {item.title}
-                              <button 
-                                className="delete-button"
+                          {(provided, snapshot) => {
+                            const dropTargetId = snapshot.draggingOver;
+                            const targetItems = dropTargetId ? 
+                              getItemsForDay(
+                                parseInt(dropTargetId.split('-')[2]),
+                                parseInt(dropTargetId.split('-')[1]) - 1,
+                                parseInt(dropTargetId.split('-')[0])
+                              ) : [];
+
+                            return (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={`calendar-item ${item.type} ${snapshot.isDragging ? 'dragging' : ''}`}
+                                style={{
+                                  ...provided.draggableProps.style,
+                                  marginTop: snapshot.isDragging ? 
+                                    (dropTargetId && targetItems.length === 0 ? '15px' : '2px') : '2px'
+                                }}
                                 onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteItem(item.id);
+                                  if (!snapshot.isDragging) {
+                                    setEditingItem(item);
+                                  }
                                 }}
                               >
-                                ×
-                              </button>
-                            </div>
-                          )}
+                                {item.title}
+                                <button 
+                                  className="delete-button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteItem(item.id);
+                                  }}
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            );
+                          }}
                         </Draggable>
                       ))}
                       {provided.placeholder}
