@@ -23,6 +23,14 @@ interface EditModalProps {
   onSave: (updatedItem: PlannerItem) => void;
 }
 
+interface DayViewProps {
+  date: string;
+  items: PlannerItem[];
+  onClose: () => void;
+  onEdit: (item: PlannerItem) => void;
+  onDelete: (id: number) => void;
+}
+
 // Utility functions
 const getDaysInMonth = (year: number, month: number): number => {
   return new Date(year, month + 1, 0).getDate();
@@ -32,11 +40,62 @@ const getFirstDayOfMonth = (year: number, month: number): number => {
   return new Date(year, month, 1).getDay();
 };
 
+// DayView component
+const DayView: React.FC<DayViewProps> = ({ date, items, onClose, onEdit, onDelete }) => {
+  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  const truncateNotes = (notes: string) => {
+    return notes.length > 30 ? notes.slice(0, 30) + '...' : notes;
+  };
+
+  const handleEdit = (item: PlannerItem) => {
+    onEdit(item);
+    onClose(); // Close the day view when opening edit modal
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="day-view-modal">
+        <div className="day-view-header">
+          <h3>{formattedDate}</h3>
+          <button onClick={onClose} className="close-button">×</button>
+        </div>
+        <div className="day-view-content">
+          {items.length === 0 ? (
+            <p className="no-items">No items for this day</p>
+          ) : (
+            <ul className="day-view-items">
+              {items.map(item => (
+                <li key={item.id} className={`day-view-item ${item.type}`}>
+                  <div className="day-view-item-content">
+                    <h4>{item.title}</h4>
+                    {item.notes && <p className="item-notes">{truncateNotes(item.notes)}</p>}
+                  </div>
+                  <div className="day-view-item-actions">
+                    <button onClick={() => handleEdit(item)}>Edit</button>
+                    <button onClick={() => onDelete(item.id)}>Delete</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Main Planner component
 const Planner: React.FC = () => {
   const [items, setItems] = useState<PlannerItem[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [editingItem, setEditingItem] = useState<PlannerItem | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const supabase = createClient();
 
   // Fetch items from Supabase
@@ -340,59 +399,67 @@ const Planner: React.FC = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       data-has-items={dayItems.length > 0}
+                      onClick={(e) => {
+                        if (e.target === e.currentTarget || (e.target as HTMLElement).classList.contains('day-number')) {
+                          setSelectedDate(dayDate);
+                        }
+                      }}
                     >
                       <span className="day-number">{day}</span>
-                      {dayItems.map((item, index) => (
-                        <Draggable
-                          key={item.id}
-                          draggableId={item.id.toString()}
-                          index={index}
-                        >
-                          {(provided, snapshot) => {
-                            const dropTargetId = snapshot.draggingOver;
-                            const targetItems = dropTargetId ? 
-                              getItemsForDay(
-                                parseInt(dropTargetId.split('-')[2]),
-                                parseInt(dropTargetId.split('-')[1]) - 1,
-                                parseInt(dropTargetId.split('-')[0])
-                              ) : [];
+                      <div className="calendar-items-container">
+                        {dayItems.map((item, index) => (
+                          <Draggable
+                            key={item.id}
+                            draggableId={item.id.toString()}
+                            index={index}
+                          >
+                            {(provided, snapshot) => {
+                              const dropTargetId = snapshot.draggingOver;
+                              const targetItems = dropTargetId ? 
+                                getItemsForDay(
+                                  parseInt(dropTargetId.split('-')[2]),
+                                  parseInt(dropTargetId.split('-')[1]) - 1,
+                                  parseInt(dropTargetId.split('-')[0])
+                                ) : [];
 
-                            return (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={`calendar-item ${item.type} ${snapshot.isDragging ? 'dragging' : ''}`}
-                                style={{
-                                  ...provided.draggableProps.style,
-                                  marginTop: snapshot.isDragging ? 
-                                    (dropTargetId && targetItems.length === 0 ? '15px' : '2px') : '2px'
-                                }}
-                                onClick={(e) => {
-                                  if (!snapshot.isDragging) {
-                                    setEditingItem(item);
-                                  }
-                                }}
-                              >
-                                <span className="item-content">
-                                  {item.title}
-                                  {item.notes && <span className="notes-indicator">📝</span>}
-                                </span>
-                                <button 
-                                  className="delete-button"
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className={`calendar-item ${item.type} ${snapshot.isDragging ? 'dragging' : ''}`}
+                                  style={{
+                                    ...provided.draggableProps.style,
+                                    marginTop: snapshot.isDragging ? 
+                                      (dropTargetId && targetItems.length === 0 ? '15px' : '2px') : '2px'
+                                  }}
                                   onClick={(e) => {
-                                    e.stopPropagation();
-                                    deleteItem(item.id);
+                                    e.stopPropagation(); // Stop event from bubbling up to calendar day
+                                    if (!snapshot.isDragging) {
+                                      setEditingItem(item);
+                                    }
                                   }}
                                 >
-                                  ×
-                                </button>
-                              </div>
-                            );
-                          }}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
+                                  <span className="item-content">
+                                    {item.title}
+                                    {item.notes && <span className="notes-indicator">📝</span>}
+                                  </span>
+                                  <button 
+                                    className="delete-button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      deleteItem(item.id);
+                                    }}
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              );
+                            }}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
                     </div>
                   )}
                 </Droppable>
@@ -414,6 +481,15 @@ const Planner: React.FC = () => {
           item={editingItem}
           onClose={() => setEditingItem(null)}
           onSave={updateItem}
+        />
+      )}
+      {selectedDate && (
+        <DayView
+          date={selectedDate}
+          items={items.filter(item => item.date === selectedDate)}
+          onClose={() => setSelectedDate(null)}
+          onEdit={setEditingItem}
+          onDelete={deleteItem}
         />
       )}
     </div>

@@ -1,7 +1,7 @@
 .protected-layout {
   height: 100vh;
-  overflow: hidden;
   background-color: #f8f9fa;
+  overflow: hidden;
 }
 
 .protected-content {

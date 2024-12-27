@@ -107,7 +107,20 @@
   transition: background-color 0.2s ease;
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  /* Remove overflow-y from here */
+  /* Add these properties to hide scrollbar but keep functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  overflow: hidden; /* Ensure container clips at boundaries */
+  padding-bottom: 0; /* Remove bottom padding to allow items to peek */
+}
+
+/* Hide webkit (Chrome, Safari, Edge) scrollbar */
+.calendar-day::-webkit-scrollbar {
+  display: none;
 }
 
 .calendar-day.empty {
@@ -115,7 +128,8 @@
 }
 
 .day-number {
-  position: relative;
+  position: sticky;
+  top: 0;
   display: block;
   text-align: left;
   margin-bottom: 2px;
@@ -123,8 +137,24 @@
   color: var(--primary-color);
   font-size: 11px;
   z-index: 2;
-  pointer-events: none;
   background-color: var(--light-color);
+  padding: 2px 0;
+}
+
+/* Add a new container for scrollable items */
+.calendar-items-container {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  padding-bottom: 12px; /* Half of the item height */
+  margin-bottom: -12px; /* Negative half of the item height */
+  scroll-padding: 4px; /* Add scroll padding for smoother stops */
+}
+
+/* Hide webkit scrollbar */
+.calendar-items-container::-webkit-scrollbar {
+  display: none;
 }
 
 .calendar-item {
@@ -141,6 +171,9 @@
   width: calc(100% - 6px);
   box-sizing: border-box;
   z-index: 1;
+  margin-bottom: 2px; /* Slightly increase space between items */
+  height: 24px; /* Set fixed height for items */
+  min-height: 24px; /* Ensure consistent height */
 }
 
 .calendar-item:hover {
@@ -335,4 +368,110 @@
 
 .calendar-item:hover .notes-indicator {
   opacity: 1;
+}
+
+.day-view-modal {
+  background-color: var(--white-color);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.day-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.day-view-header h3 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--primary-color);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;  /* Make it square */
+  height: 32px;  /* Make it square */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-view-content {
+  padding: 10px 0;
+}
+
+.no-items {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.day-view-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.day-view-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: var(--light-color);
+}
+
+.day-view-item-content {
+  flex: 1;
+}
+
+.day-view-item-content h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+}
+
+.item-notes {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.day-view-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.day-view-item-actions button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.day-view-item-actions button:first-child {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+}
+
+.day-view-item-actions button:last-child {
+  background-color: #ff4444;
+  color: var(--white-color);
 }
