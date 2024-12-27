@@ -14,6 +14,7 @@ interface PlannerItem {
   date: string;
   type: ItemType;
   user_id: string;
+  notes?: string; // Add notes field
 }
 
 interface EditModalProps {
@@ -121,7 +122,8 @@ const Planner: React.FC = () => {
         .update({
           title: updatedItem.title,
           date: updatedItem.date,
-          type: updatedItem.type
+          type: updatedItem.type,
+          notes: updatedItem.notes
         })
         .eq('id', updatedItem.id);
 
@@ -179,14 +181,16 @@ const Planner: React.FC = () => {
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [type, setType] = useState<ItemType>('homework');
+    const [notes, setNotes] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       if (title && date) {
-        addItem({ title, date, type });
+        addItem({ title, date, type, notes });
         setTitle('');
         setDate('');
         setType('homework');
+        setNotes('');
       }
     };
 
@@ -214,6 +218,12 @@ const Planner: React.FC = () => {
           <option value="presentation">Presentation</option>
           <option value="other">Other</option>
         </select>
+        <input
+          type="text"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Notes (optional)"
+        />
         <button type="submit">Add Item</button>
       </form>
     );
@@ -224,10 +234,11 @@ const Planner: React.FC = () => {
     const [title, setTitle] = useState(item.title);
     const [date, setDate] = useState(item.date);
     const [type, setType] = useState<ItemType>(item.type);
+    const [notes, setNotes] = useState(item.notes || '');
 
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      onSave({ ...item, title, date, type });
+      onSave({ ...item, title, date, type, notes });
     };
 
     return (
@@ -256,6 +267,12 @@ const Planner: React.FC = () => {
               <option value="presentation">Presentation</option>
               <option value="other">Other</option>
             </select>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Notes (optional)"
+              rows={3}
+            />
             <div className="modal-buttons">
               <button type="submit">Save</button>
               <button type="button" onClick={onClose}>Cancel</button>
@@ -357,7 +374,10 @@ const Planner: React.FC = () => {
                                   }
                                 }}
                               >
-                                {item.title}
+                                <span className="item-content">
+                                  {item.title}
+                                  {item.notes && <span className="notes-indicator">📝</span>}
+                                </span>
                                 <button 
                                   className="delete-button"
                                   onClick={(e) => {

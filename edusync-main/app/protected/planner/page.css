@@ -279,6 +279,15 @@
   font-size: 14px;
 }
 
+.modal textarea {
+  padding: 8px;
+  border: 1px solid var(--light-color);
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 60px;
+}
+
 .modal-buttons {
   display: flex;
   gap: 10px;
@@ -307,4 +316,23 @@
 
 .modal-buttons button:hover {
   transform: translateY(-1px);
+}
+
+.item-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notes-indicator {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.calendar-item:hover .notes-indicator {
+  opacity: 1;
 }
