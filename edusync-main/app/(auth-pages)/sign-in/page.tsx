@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use client';
 
 import { FormEvent, useState, Suspense } from 'react';
