@@ -12,6 +12,7 @@ import logoblack from '@/assets/logos/logo-black.svg';
 import googleIcon from '@/assets/icons/google.svg';
 import './page.css';
 import { createClient } from '@/utils/supabase/client';
+import { getBaseUrl } from '@/utils/environment';
 
 // Separate component for the parts that need searchParams
 function SignInForm() {
@@ -41,23 +42,16 @@ function SignInForm() {
   };
 
   const handleGoogleSignIn = async () => {
-    try {
-      setLoading(true);
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      
-      if (error) {
-        showSnackbar(error.message, 'error');
-      }
-    } catch (error: any) {
-      showSnackbar('Failed to sign in with Google', 'error');
-    } finally {
-      setLoading(false);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${getBaseUrl()}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      showSnackbar(error.message, 'error');
     }
   };
 
@@ -84,10 +78,10 @@ function SignInForm() {
       >
         {loading ? 'Signing in...' : 'Sign in'}
       </button>
-      <button type="button" 
+      <button 
+        type="button" 
         className="login-button secondary"
         onClick={handleGoogleSignIn}
-        disabled={loading}
       >
         <Image src={googleIcon} alt="Google icon" width={24} height={24} />
         Sign in with Google
