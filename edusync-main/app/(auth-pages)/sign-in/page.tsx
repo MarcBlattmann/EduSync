@@ -65,7 +65,7 @@ function SignInForm() {
         {loading ? 'Signing in...' : 'Sign in'}
       </button>
       <button type="button" className="login-button secondary">
-        <Image src={googleIcon} alt="Google icon" />
+        <Image src={googleIcon} alt="Google icon" width={24} height={24} />
         Sign in with Google
       </button>
     </form>
@@ -80,7 +80,7 @@ export default function SignIn() {
         {/* Illustration content */}
       </div>
       <div className="login-container">
-        <Image src={logoblack} alt="logo" className="logo" />
+        <Image src={logoblack} alt="logo" className="logo" priority />
         <h1 className="title">Welcome Back!</h1>
         <span className="subtitle">Please enter your details.</span>
         <Suspense fallback={<div>Loading...</div>}>
