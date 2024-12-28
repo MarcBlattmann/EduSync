@@ -4,6 +4,7 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import './layout.css';
 import { Snackbar } from '@/components/ui/Snackbar/Snackbar';
 import { SnackbarProvider } from '@/context/SnackbarContext';
+import { SidebarProvider } from '@/context/SidebarContext';
 
 interface ProtectedLayoutProps {
   children: ReactNode;
@@ -12,13 +13,15 @@ interface ProtectedLayoutProps {
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {  
     return (
       <SnackbarProvider>
-        <div className="protected-layout">
-          <TopBar />
-          <Sidebar />
-          <main className="protected-content">
-            {children}
-          </main>
-        </div>
+        <SidebarProvider>
+          <div className="protected-layout">
+            <TopBar />
+            <Sidebar />
+            <main className="protected-content">
+              {children}
+            </main>
+          </div>
+        </SidebarProvider>
       </SnackbarProvider>
     );
 }

@@ -1,13 +1,15 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSidebar } from '@/context/SidebarContext';
 import styles from './Sidebar.module.css';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { isOpen } = useSidebar();
 
   return (
-    <div className={styles.sidebar}>
+    <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
       <nav className={styles.nav}>
         <Link 
             href="/protected" 

@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 52.5px;  /* 75% of 70px */
+  height: 52.5px;
   background-color: white;
   box-shadow: none;
   z-index: 1000;
@@ -12,10 +12,10 @@
 .topbar::after {
   content: '';
   position: absolute;
-  left: 180px;  /* increased from 165px */
+  left: 200px;  
   right: 0;
   bottom: 0;
-  height: 3px;    /* 75% of 4px */
+  height: 3px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   clip-path: inset(0 0 -4px 0);
   pointer-events: none;
@@ -27,13 +27,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 18px;  /* 75% of 24px */
+  padding: 0 18px;
 }
 
 .left-section {
   display: flex;
   align-items: center;
-  gap: 9px;  /* 75% of 12px */
+  gap: 9px;
 }
 
 .right-section {
@@ -42,39 +42,39 @@
 }
 
 .topbar-logo {
-  height: 30px;  /* 75% of 40px */
+  height: 30px;
   width: auto;
 }
 
 .brand-text {
-  font-size: 18px;  /* 75% of 24px */
+  font-size: 18px; 
   font-weight: 600;
   color: var(--primary-color);
 }
 
 .search-container {
   position: relative;
-  width: 247.5px;  /* increased from 225px */
+  width: 247.5px; 
   z-index: 1000;
 }
 
 .search-icon {
   position: absolute;
-  left: 12px;    /* 75% of 16px */
+  left: 12px; 
   top: 50%;
   transform: translateY(-50%);
-  width: 16.5px;   /* increased from 15px */
-  height: 16.5px;  /* increased from 15px */
+  width: 16.5px;  
+  height: 16.5px;
   color: rgba(0, 0, 0, 0.5);
 }
 
 .search-input {
   all: unset;
   width: 100%;
-  padding: 9.9px 16.5px 9.9px 41.25px;  /* increased from 9px 15px 9px 37.5px */
+  padding: 9.9px 16.5px 9.9px 41.25px;
   background-color: var(--light-color);
   border-radius: 999px;
-  font-size: 13.2px;  /* increased from 12px */
+  font-size: 13.2px;
   color: black;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .profile-section {
-  margin-left: 13.2px;  /* increased from 12px */
+  margin-left: 13.2px;
   z-index: 1001;
   position: relative;
 }
@@ -92,8 +92,8 @@
   position: relative;
   all: unset;
   cursor: pointer;
-  height: 33px;  /* increased from 30px */
-  width: 33px;   /* increased from 30px */
+  height: 33px;
+  width: 33px;  
   border-radius: 50%;
   background-color: var(--primary-color);
   display: flex;
@@ -109,7 +109,7 @@
 .profile-avatar {
   color: white;
   font-weight: 500;
-  font-size: 12px;  /* 75% of 16px */
+  font-size: 12px; 
   text-transform: uppercase;
   line-height: 1;
   display: flex;
@@ -120,20 +120,20 @@
 }
 
 .profile-icon {
-  width: 19.8px;   /* increased from 18px */
-  height: 19.8px;  /* increased from 18px */
+  width: 19.8px; 
+  height: 19.8px;  
   color: var(--primary-color);
 }
 
 .profile-dropdown {
   position: absolute;
-  top: calc(100% + 6px);  /* already at 75% */
+  top: calc(100% + 6px);  
   right: 0;
   background-color: white;
-  border-radius: 6px;     /* already at 75% */
-  box-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.15); /* reduced shadow size */
-  min-width: 135px;       /* already at 75% */
-  padding: 4px;          /* add small padding */
+  border-radius: 6px;    
+  box-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.15);
+  min-width: 135px;  
+  padding: 4px;     
   z-index: 1002;
 }
 
@@ -141,23 +141,53 @@
   all: unset;
   display: flex;
   align-items: center;
-  gap: 6px;              /* 75% of 8px */
-  padding: 7px 10px;     /* slightly reduce padding */
+  gap: 6px;    
+  padding: 7px 10px;
   width: 100%;
   box-sizing: border-box;
   cursor: pointer;
   color: #dc2626;
   transition: background-color 0.2s ease;
-  font-size: 12px;       /* add 75% font size */
-  border-radius: 4px;    /* add smaller radius for inner items */
+  font-size: 12px;  
+  border-radius: 4px;  
 }
 
 .dropdown-item:hover {
   background-color: #fee2e2;
-  border-radius: 4px;    /* match the new radius */
+  border-radius: 4px; 
 }
 
 .dropdown-icon {
-  width: 15px;   /* 75% of 20px */
-  height: 15px;  /* 75% of 20px */
+  width: 15px; 
+  height: 15px;
+}
+
+.menu-button {
+  display: none !important; 
+  all: unset;
+  cursor: pointer;
+  padding: 6px;
+  margin-right: 9px;
+}
+
+.menu-button svg {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .menu-button {
+    display: block !important;
+  }
+  
+  .topbar::after {
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%; 
+  }
+
+  .search-container {
+    width: 180px;  
+  }
 }
