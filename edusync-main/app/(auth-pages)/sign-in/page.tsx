@@ -11,8 +11,7 @@ import { useSnackbar } from '@/context/SnackbarContext';
 import logoblack from '@/assets/logos/logo-black.svg';
 import googleIcon from '@/assets/icons/google.svg';
 import './page.css';
-import { createClient } from '@/utils/supabase/client';
-import { getBaseUrl } from '@/utils/environment';
+import { createClient } from '@supabase/supabase-js';
 
 // Separate component for the parts that need searchParams
 function SignInForm() {
@@ -42,16 +41,20 @@ function SignInForm() {
   };
 
   const handleGoogleSignIn = async () => {
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${getBaseUrl()}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      showSnackbar(error.message, 'error');
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      
+      if (error) {
+        showSnackbar(error.message, 'error');
+      }
+    } catch (error: any) {
+      showSnackbar(error.message || 'An error occurred', 'error');
     }
   };
 
