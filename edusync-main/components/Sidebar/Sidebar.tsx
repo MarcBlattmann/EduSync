@@ -6,7 +6,13 @@ import styles from './Sidebar.module.css';
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { isOpen } = useSidebar();
+  const { isOpen, toggleSidebar } = useSidebar();
+
+  const handleLinkClick = () => {
+    if (window.innerWidth <= 768) {
+      toggleSidebar();
+    }
+  };
 
   return (
     <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
@@ -14,6 +20,7 @@ export default function Sidebar() {
         <Link 
             href="/protected" 
             className={`${styles.navItem} ${pathname === '/protected' ? styles.active : ''}`}
+            onClick={handleLinkClick}
           >
             Dashboard
         </Link>
@@ -21,6 +28,7 @@ export default function Sidebar() {
         <Link 
             href="/protected/planner" 
             className={`${styles.navItem} ${pathname === '/protected/planner' ? styles.active : ''}`}
+            onClick={handleLinkClick}
           >
             Planner
         </Link>
@@ -28,10 +36,10 @@ export default function Sidebar() {
         <Link 
             href="/protected/EducationTree" 
             className={`${styles.navItem} ${pathname === '/protected/EducationTree' ? styles.active : ''}`}
+            onClick={handleLinkClick}
           >
             Education Tree
         </Link>
-        
       </nav>
     </div>
   );
