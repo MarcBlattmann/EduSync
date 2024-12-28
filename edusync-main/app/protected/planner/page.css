@@ -12,6 +12,18 @@
   padding: 15px;
   box-sizing: border-box;
   font-family: 'Roboto', Arial, sans-serif;
+  height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 100px; /* Add extra padding at bottom for better scrolling */
+  margin-top: 52.5px; /* Account for the fixed header */
+  /* Add these to hide scrollbar while maintaining functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide WebKit (Chrome, Safari, newer versions of Opera) scrollbar */
+.planner::-webkit-scrollbar {
+  display: none;
 }
 
 .planner h1 {
@@ -29,6 +41,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 .add-item-form input,
@@ -40,6 +53,7 @@
   font-size: 12px;
   background-color: var(--white-color);
   color: var(--primary-color);
+  min-width: 120px;
 }
 
 .add-item-form input:focus,
@@ -71,6 +85,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
+  min-height: fit-content; /* Ensure calendar expands with content */
+  overflow: visible; /* Allow content to flow naturally */
 }
 
 .calendar h2 {
@@ -99,10 +115,10 @@
 .calendar-day {
   position: relative;
   background-color: var(--light-color);
-  min-height: 90px; /* Reduced from 100px */
-  height: 110px; /* Reduced from 120px */
+  min-height: 80px;
+  height: auto;
   border-radius: 4px;
-  padding: 4px;
+  padding: 5px;
   font-size: 11px;
   transition: background-color 0.2s ease;
   width: 100%;
@@ -110,12 +126,10 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  /* Remove overflow-y from here */
-  /* Add these properties to hide scrollbar but keep functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  overflow: hidden; /* Ensure container clips at boundaries */
-  padding-bottom: 0; /* Remove bottom padding to allow items to peek */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: hidden; 
+  padding-bottom: 4px; 
 }
 
 /* Hide webkit (Chrome, Safari, Edge) scrollbar */
@@ -163,7 +177,6 @@
 
 .calendar-item {
   position: relative;
-  margin-top: 2px;
   padding: 3px 6px;
   border-radius: 4px;
   font-size: 11px;
@@ -178,6 +191,7 @@
   margin-bottom: 2px; /* Slightly increase space between items */
   height: 24px; /* Set fixed height for items */
   min-height: 24px; /* Ensure consistent height */
+  margin-top: 4px; /* Changed from 5px to 4px */
 }
 
 .calendar-item:hover {
@@ -478,4 +492,129 @@
 .day-view-item-actions button:last-child {
   background-color: #ff4444;
   color: var(--white-color);
+}
+
+@media screen and (max-width: 768px) {
+  .planner {
+    padding: 10px;
+    height: calc(100vh - 52.5px); /* Account for header on mobile */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .planner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .add-item-form {
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .add-item-form input,
+  .add-item-form select,
+  .add-item-form button {
+    width: 100%;
+    box-sizing: border-box;  /* Add this to ensure padding is included in width */
+    min-width: 0;  /* Override the min-width to prevent overflow */
+    margin: 0;     /* Remove any margins */
+  }
+
+  .calendar-grid {
+    gap: 4px;
+  }
+
+  .calendar-day {
+    min-height: 60px;
+    height: 80px;
+    padding: 4px;  /* Reduce padding on mobile */
+  }
+
+  .calendar-day-header {
+    font-size: 10px;
+    padding: 4px;
+    position: relative;
+  }
+
+  .calendar-day-header.sun { content: 'Sun'; }
+  .calendar-day-header.mon { content: 'Mon'; }
+  .calendar-day-header.tue { content: 'Tue'; }
+  .calendar-day-header.wed { content: 'Wed'; }
+  .calendar-day-header.thu { content: 'Thu'; }
+  .calendar-day-header.fri { content: 'Fri'; }
+  .calendar-day-header.sat { content: 'Sat'; }
+
+  .calendar-item {
+    padding: 2px 4px;
+    font-size: 10px;
+    height: 20px;
+    min-height: 20px;
+    width: 100%;   /* Ensure items take full width */
+    margin: 2px 0; /* Adjust margins */
+    box-sizing: border-box;
+  }
+
+  .day-number {
+    font-size: 10px;
+  }
+
+  .modal {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .day-view-modal {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .day-view-item {
+    padding: 8px;
+  }
+
+  .day-view-item-content h4 {
+    font-size: 0.9rem;
+  }
+
+  .item-notes {
+    font-size: 0.8rem;
+  }
+
+  /* Improve touch targets */
+  .month-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .delete-button {
+    opacity: 1;
+    padding: 4px 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .calendar-grid {
+    gap: 2px;
+  }
+
+  .calendar-day {
+    min-height: 50px;
+    height: 70px;
+  }
+
+  .calendar-item {
+    font-size: 9px;
+    height: 18px;
+    min-height: 18px;
+  }
+
+  .calendar-day-header.sun { content: 'S'; }
+  .calendar-day-header.mon { content: 'M'; }
+  .calendar-day-header.tue { content: 'T'; }
+  .calendar-day-header.wed { content: 'W'; }
+  .calendar-day-header.thu { content: 'T'; }
+  .calendar-day-header.fri { content: 'F'; }
+  .calendar-day-header.sat { content: 'S'; }
 }
