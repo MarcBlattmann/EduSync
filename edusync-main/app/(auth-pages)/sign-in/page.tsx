@@ -1,20 +1,25 @@
 "use client";
 
-import { signInAction } from "@/app/actions";
-import logoblack from "@/assets/logos/logo-black.svg";
-import GoogleLogo from "@/assets/logos/google-logo.svg";
-import Link from "next/link";
+import { FormEvent, useState, useEffect } from 'react';
 import Image from 'next/image';
-import { createClient } from "@/utils/supabase/client";
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { signInAction } from '@/app/actions';
 import { useSnackbar } from '@/context/SnackbarContext';
-import "./page.css";
+import logoblack from '@/assets/logos/logo-black.svg';
+import GoogleLogo from '@/assets/logos/google-logo.svg';
+import { createClient } from "@/utils/supabase/client";
+import './page.css';
+
+// Define the action result type
+interface SignInResult {
+  error?: string;
+}
 
 export default function Login() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
-  const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -52,18 +57,21 @@ export default function Login() {
     }
   };
 
-  const handleEmailSubmit = async (formData: FormData) => {
+  const handleEmailSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
+      const formData = new FormData(e.currentTarget);
       setLoading(true);
-      const result = await signInAction(formData);
+      // Explicitly type the result
+      const result = await signInAction(formData) as SignInResult;
       if (result?.error) {
         showSnackbar(result.error, 'error');
       } else {
         showSnackbar('Successfully signed in!', 'success');
         router.push('/app');
       }
-    } catch (err: any) {
-      showSnackbar(err.message, 'error');
+    } catch (error: any) {
+      showSnackbar(error.message || 'An error occurred', 'error');
     } finally {
       setLoading(false);
     }
@@ -81,11 +89,7 @@ export default function Login() {
         <h1 className="title">Welcome back!</h1>
         <h4 className="subtitle">Please enter your details</h4>
 
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          handleEmailSubmit(formData);
-        }}>
+        <form onSubmit={handleEmailSubmit}>
           <input
             type="email" 
             required 
