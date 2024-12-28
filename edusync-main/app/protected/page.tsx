@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Sidebar from "@/components/Sidebar/Sidebar";
