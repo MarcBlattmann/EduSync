@@ -11,7 +11,7 @@ import { useSnackbar } from '@/context/SnackbarContext';
 import logoblack from '@/assets/logos/logo-black.svg';
 import googleIcon from '@/assets/icons/google.svg';
 import './page.css';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/client';  // Change this import
 
 // Separate component for the parts that need searchParams
 function SignInForm() {
@@ -42,7 +42,7 @@ function SignInForm() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const supabase = createClient();
+      const supabase = createClient();  // This will now use your env variables
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
