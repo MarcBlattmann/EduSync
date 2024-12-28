@@ -527,9 +527,10 @@
   }
 
   .calendar-day {
-    min-height: 60px;
-    height: 80px;
-    padding: 4px;  /* Reduce padding on mobile */
+    min-height: 120px; /* Increase minimum height */
+    height: auto; /* Allow height to grow */
+    max-height: 200px; /* Set maximum height */
+    padding: 6px; /* Slightly more padding */
   }
 
   .calendar-day-header {
@@ -547,17 +548,46 @@
   .calendar-day-header.sat { content: 'Sat'; }
 
   .calendar-item {
-    padding: 2px 4px;
-    font-size: 10px;
-    height: 20px;
-    min-height: 20px;
-    width: 100%;   /* Ensure items take full width */
-    margin: 2px 0; /* Adjust margins */
-    box-sizing: border-box;
+    padding: 4px 8px;
+    font-size: 10px; /* Smaller font size */
+    height: auto;
+    min-height: 24px; /* Reduced height */
+    margin: 2px 0;
+    width: 100%;
+    flex-wrap: wrap;
   }
 
-  .day-number {
-    font-size: 10px;
+  .item-content {
+    padding: 1px 0;
+    width: 100%; /* Full width */
+    white-space: normal; /* Allow text to wrap */
+    overflow: visible; /* Show all content */
+    text-overflow: unset;
+    line-height: 1.2; /* Slightly reduced line height */
+    font-weight: 400; /* Normal font weight */
+  }
+
+  .delete-button {
+    display: none !important; /* Force hide delete button on mobile */
+  }
+
+  .calendar-items-container {
+    padding-bottom: 8px;
+    margin-bottom: -8px;
+    overflow-y: auto; /* Enable scrolling */
+  }
+
+  .delete-button {
+    opacity: 1;
+    padding: 4px;
+    width: 24px; /* Fixed width */
+    height: 24px; /* Fixed height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    background-color: rgba(0, 0, 0, 0.05); /* Subtle background to show it's tappable */
+    border-radius: 50%;
   }
 
   .modal {
@@ -600,14 +630,14 @@
   }
 
   .calendar-day {
-    min-height: 50px;
-    height: 70px;
+    min-height: 100px;
+    max-height: 160px;
   }
 
   .calendar-item {
-    font-size: 9px;
-    height: 18px;
-    min-height: 18px;
+    font-size: 9px; /* Even smaller for very small screens */
+    min-height: 22px; /* Slightly smaller height */
+    padding: 3px 6px; /* Reduced padding */
   }
 
   .calendar-day-header.sun { content: 'S'; }
@@ -617,4 +647,9 @@
   .calendar-day-header.thu { content: 'T'; }
   .calendar-day-header.fri { content: 'F'; }
   .calendar-day-header.sat { content: 'S'; }
+
+  .delete-button {
+    width: 22px;
+    height: 22px;
+  }
 }

@@ -190,4 +190,8 @@
   .search-container {
     width: 180px;  
   }
+
+  .brand-text {
+    display: none;
+  }
 }
