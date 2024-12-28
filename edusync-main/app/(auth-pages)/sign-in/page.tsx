@@ -55,10 +55,6 @@ function SignInForm() {
         required
         className="input"
       />
-      <div className="mini-menu-container">
-        <span>Remember me</span>
-        <span>Forgot password?</span>
-      </div>
       <button 
         type="submit" 
         className="login-button main"

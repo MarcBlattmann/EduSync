@@ -1,141 +1,93 @@
-"use client";
+'use client';
 
-import { signUpAction } from "@/app/actions";
-import logoblack from "@/assets/logos/logo-black.svg";
-import GoogleLogo from "@/assets/logos/google-logo.svg";
-import Link from "next/link";
+import { FormEvent, useState, Suspense } from 'react';
 import Image from 'next/image';
-import { createClient } from "@/utils/supabase/client";
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import "./page.css";
+import { signUpAction } from '@/app/actions';
+import { useSnackbar } from '@/context/SnackbarContext';
+import logoblack from '@/assets/logos/logo-black.svg';
+import './page.css';
 
-export default function Register() {
-  const router = useRouter();
+// Separate component for the form that uses searchParams
+function SignUpForm() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const filteredParams = new URLSearchParams(searchParams.toString());
-  filteredParams.delete('NEXT_REDIRECT');
-  const message = filteredParams.get('success') || null;
-  let errorMessage = filteredParams.get('error') || null;
-  
-  const handleGoogleSignUp = async () => {
-    setLoading(true);
+  const { showSnackbar } = useSnackbar();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/app`
-        }
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEmailSubmit = async (formData: FormData) => {
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    const password = formData.get('password');
-    const confirmPassword = formData.get('confirmPassword');
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    try {
+      const formData = new FormData(e.currentTarget);
+      setLoading(true);
       const result = await signUpAction(formData);
       if (result?.error) {
-        setError(result.error);
+        showSnackbar(result.error, 'error');
       } else {
-        setSuccess("Registration successful! Redirecting...");
-        router.push('/app');
+        showSnackbar('Successfully signed up!', 'success');
+        const callbackUrl = searchParams.get('callbackUrl') || '/protected';
+        router.push(callbackUrl);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error: any) {
+      showSnackbar(error.message || 'An error occurred', 'error');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="main-container">
-      <div className="illustration-container"></div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+        className="input"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+        className="input"
+      />
+      <input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        required
+        className="input"
+      />
+      <button 
+        type="submit" 
+        className="login-button main"
+        disabled={loading}
+      >
+        {loading ? 'Signing up...' : 'Sign up'}
+      </button>
+    </form>
+  );
+}
+
+// Main component
+export default function SignUp() {
+  return (
+    <main className="main-container">
+      <div className="illustration-container">
+        {/* Illustration content */}
+      </div>
       <div className="login-container">
-        <Image src={logoblack} alt="logo" className="logo" />
-        <h1 className="title">Create Account</h1>
-        <h4 className="subtitle">Please enter your details</h4>
-
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          handleEmailSubmit(formData);
-        }}>
-          <input 
-            type="email" 
-            required 
-            name="email" 
-            placeholder="Email" 
-            className="input"
-            disabled={loading}
-          />
-          <input 
-            type="password" 
-            required 
-            name="password" 
-            placeholder="Password (min 6 characters)" 
-            className="input"
-            minLength={6}
-            disabled={loading}
-          />
-          <input 
-            type="password" 
-            required 
-            name="confirmPassword" 
-            placeholder="Confirm Password" 
-            className="input"
-            minLength={6}
-            disabled={loading}
-          />
-          <button 
-            type="submit" 
-            className="login-button main"
-            disabled={loading}
-          >
-            {loading ? 'Signing up...' : 'Sign Up'}
-          </button>
-        </form>
-
-        <button 
-          type="button" 
-          className="login-button secondary" 
-          onClick={handleGoogleSignUp}
-          disabled={loading}
-        >
-          <Image alt="Google Logo" src={GoogleLogo} /> 
-          {loading ? 'Connecting...' : 'Sign up with Google'}
-        </button>
-
-        {errorMessage ? (
-          <div className="message" id="error">{errorMessage}</div>
-        ) : (
-          message && <div className="message" id="success">{message}</div>
-        )}
-
+        <Image src={logoblack} alt="logo" className="logo" priority />
+        <h1 className="title">Welcome!</h1>
+        <span className="subtitle">Please enter your details.</span>
+        <Suspense fallback={<div>Loading...</div>}>
+          <SignUpForm />
+        </Suspense>
         <div className="dont-have-a-acount-button">
           Already have an account? <Link href="/sign-in"><span>Sign in</span></Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
