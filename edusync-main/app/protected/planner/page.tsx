@@ -363,6 +363,13 @@ const Planner: React.FC = () => {
     const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
     const blanks = Array.from({ length: firstDayOfMonth }, (_, i) => i);
 
+    const isToday = (day: number) => {
+      const today = new Date();
+      return day === today.getDate() && 
+             currentMonth === today.getMonth() && 
+             currentYear === today.getFullYear();
+    };
+
     return (
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="calendar">
@@ -395,7 +402,7 @@ const Planner: React.FC = () => {
                 <Droppable droppableId={dayDate} key={`day-${day}`}>
                   {(provided) => (
                     <div
-                      className="calendar-day"
+                      className={`calendar-day ${isToday(day) ? 'today' : ''}`}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       data-has-items={dayItems.length > 0}
