@@ -9,11 +9,11 @@ interface SearchParams {
 
 export default function SearchResultPage({ params }: { params: Promise<SearchParams> }) {
   const resolvedParams = use(params);
-  const decodedQuery = decodeURIComponent(resolvedParams.query);
+  const title = decodeURIComponent(resolvedParams.query);
 
   return (
     <div className="search-results">
-      <h1>{decodedQuery}</h1>
+      <h1>{title}</h1>
     </div>
   );
 }

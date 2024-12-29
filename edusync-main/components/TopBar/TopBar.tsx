@@ -21,6 +21,7 @@ export default function TopBar() {
           </button>
           <Image src={logoblack} alt="logo" className="topbar-logo" />
           <span className="brand-text">EduSync</span>
+          <span className="beta-tag">BETA</span>
         </div>
         <div className="right-section">
           <SearchBar />
