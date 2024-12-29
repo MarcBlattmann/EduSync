@@ -1,19 +1,25 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { use } from 'react';
 import './page.css';
 
-interface SearchParams {
-  query: string;
-}
-
-export default function SearchResultPage({ params }: { params: Promise<SearchParams> }) {
+export default function SearchResults({ params }: { params: Promise<{ query: string }> }) {
+  const searchParams = useSearchParams();
   const resolvedParams = use(params);
-  const title = decodeURIComponent(resolvedParams.query);
+  const decodedContent = decodeURIComponent(searchParams.get('content') || '');
+  const decodedQuery = decodeURIComponent(resolvedParams.query);
 
   return (
     <div className="search-results">
-      <h1>{title}</h1>
+      <h1>{decodedQuery}</h1>
+      {decodedContent && (
+        <div 
+          className="search-content"
+          dangerouslySetInnerHTML={{ __html: decodedContent }}
+        />
+      )}
     </div>
   );
 }

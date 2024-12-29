@@ -10,6 +10,7 @@ interface SearchSuggestion {
   id: string;
   title: string;
   category: string;
+  content: string; // Add HTML content field
 }
 
 export default function SearchBar() {
@@ -86,9 +87,9 @@ export default function SearchBar() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  const navigateToSearch = (searchText: string) => {
+  const navigateToSearch = (searchText: string, content?: string) => {
     if (searchText) {
-      router.push(`/protected/search/${encodeURIComponent(searchText)}`);
+      router.push(`/protected/search/${encodeURIComponent(searchText)}?content=${encodeURIComponent(content || '')}`);
     }
   };
 
@@ -104,7 +105,7 @@ export default function SearchBar() {
         const selectedSuggestion = suggestions[selectedIndex];
         setSearchQuery(selectedSuggestion.title);
         setShowSuggestions(false);
-        navigateToSearch(selectedSuggestion.title);
+        navigateToSearch(selectedSuggestion.title, selectedSuggestion.content); // Modified to include content
       } else if (searchQuery) {
         // Navigate with current search query if no suggestion is selected
         navigateToSearch(searchQuery);
@@ -117,7 +118,7 @@ export default function SearchBar() {
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     setSearchQuery(suggestion.title);
     setShowSuggestions(false);
-    navigateToSearch(suggestion.title);
+    navigateToSearch(suggestion.title, suggestion.content); // Modified to include content
   };
 
   return (

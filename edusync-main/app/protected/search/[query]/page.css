@@ -1,11 +1,13 @@
 .search-results {
   padding: 20px;
   margin-top: 52.5px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .search-results h1 {
   color: var(--primary-color);
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 20px;
 }
 
@@ -58,6 +60,23 @@
   font-size: 16px;
 }
 
+.search-content {
+  background-color: var(--white-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-content h2 {
+  color: var(--primary-color);
+  margin-bottom: 16px;
+}
+
+.search-content p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
 @media (max-width: 768px) {
   .search-results {
     padding: 16px;
@@ -69,5 +88,9 @@
 
   .results-container {
     grid-template-columns: 1fr;
+  }
+
+  .search-content {
+    padding: 16px;
   }
 }
