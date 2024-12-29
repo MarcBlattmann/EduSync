@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useSnackbar } from '@/context/SnackbarContext';
+import { useRouter } from 'next/navigation';
 import './SearchBar.css';
 
 interface SearchSuggestion {
@@ -19,6 +20,7 @@ export default function SearchBar() {
   const containerRef = useRef<HTMLDivElement>(null);
   const supabase = useRef(createClient());
   const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   useEffect(() => {
     const initializeSearchData = async () => {
@@ -84,6 +86,12 @@ export default function SearchBar() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  const navigateToSearch = (searchText: string) => {
+    if (searchText) {
+      router.push(`/protected/search/${encodeURIComponent(searchText)}`);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -91,12 +99,25 @@ export default function SearchBar() {
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setSelectedIndex(prev => Math.max(prev - 1, -1));
-    } else if (e.key === 'Enter' && selectedIndex >= 0) {
-      setSearchQuery(suggestions[selectedIndex].title);
-      setShowSuggestions(false);
+    } else if (e.key === 'Enter') {
+      if (selectedIndex >= 0) {
+        const selectedSuggestion = suggestions[selectedIndex];
+        setSearchQuery(selectedSuggestion.title);
+        setShowSuggestions(false);
+        navigateToSearch(selectedSuggestion.title);
+      } else if (searchQuery) {
+        // Navigate with current search query if no suggestion is selected
+        navigateToSearch(searchQuery);
+      }
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
     }
+  };
+
+  const handleSuggestionClick = (suggestion: SearchSuggestion) => {
+    setSearchQuery(suggestion.title);
+    setShowSuggestions(false);
+    navigateToSearch(suggestion.title);
   };
 
   return (
@@ -123,10 +144,7 @@ export default function SearchBar() {
             <div
               key={suggestion.id}
               className={`suggestion-item ${index === selectedIndex ? 'selected' : ''}`}
-              onClick={() => {
-                setSearchQuery(suggestion.title);
-                setShowSuggestions(false);
-              }}
+              onClick={() => handleSuggestionClick(suggestion)}
             >
               <span>{suggestion.title}</span>
               <span className="suggestion-category">{suggestion.category}</span>
