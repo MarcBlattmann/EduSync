@@ -8,16 +8,16 @@ import './page.css';
 export default function SearchResults({ params }: { params: Promise<{ query: string }> }) {
   const searchParams = useSearchParams();
   const resolvedParams = use(params);
-  const decodedContent = decodeURIComponent(searchParams.get('content') || '');
-  const decodedQuery = decodeURIComponent(resolvedParams.query);
+  const content = decodeURIComponent(searchParams.get('content') || '');
+  const title = decodeURIComponent(resolvedParams.query);
 
   return (
     <div className="search-results">
-      <h1>{decodedQuery}</h1>
-      {decodedContent && (
+      <h1>{title}</h1>
+      {content && (
         <div 
           className="search-content"
-          dangerouslySetInnerHTML={{ __html: decodedContent }}
+          dangerouslySetInnerHTML={{ __html: content }}
         />
       )}
     </div>
