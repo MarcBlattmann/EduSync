@@ -41,7 +41,8 @@ export default function AdminPage() {
         return;
       }
 
-      setCurrentUserEmail(user.email);
+      // Handle the case where email might be undefined
+      setCurrentUserEmail(user.email ?? 'No email available');
 
       // Fetch all users with their profiles
       const { data: profiles, error: fetchError } = await supabase
