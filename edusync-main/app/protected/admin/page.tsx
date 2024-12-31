@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import type { User, ChangeRequest } from '@/types/supabase';
+import type { User, ChangeRequest, UserRole } from '@/types/supabase';
 import './admin.css';
 
 export default function AdminPage() {
@@ -59,7 +59,7 @@ export default function AdminPage() {
     checkAdminAccess();
   }, []);
 
-  const handleRoleChange = async (userId: string, newRole: string) => {
+  const handleRoleChange = async (userId: string, newRole: UserRole) => {
     const supabase = createClient();
     const { error } = await supabase
       .from('profiles')
@@ -70,7 +70,7 @@ export default function AdminPage() {
       setError(error.message);
     } else {
       setUsers(users.map(user => 
-        user.id === userId ? { ...user, role: newRole } : user
+        user.id === userId ? { ...user, role: newRole as UserRole } : user
       ));
     }
   };
@@ -190,7 +190,7 @@ export default function AdminPage() {
                     <td>
                       <select
                         value={user.role}
-                        onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                        onChange={(e) => handleRoleChange(user.id, e.target.value as UserRole)}
                       >
                         <option value="user">User</option>
                         <option value="moderator">Moderator</option>
