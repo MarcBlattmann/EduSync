@@ -1,0 +1,86 @@
+.admin-container {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.admin-section {
+  background: var(--white-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-loading, .admin-error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.admin-error {
+  color: #dc2626;
+}
+
+.users-table {
+  overflow-x: auto;
+}
+
+.users-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.users-table th,
+.users-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.users-table th {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.users-table select {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid var(--light-color);
+  background-color: white;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.users-table select:hover {
+  border-color: var(--secondary-color);
+}
+
+.admin-info {
+  background: var(--light-color);
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.admin-info p {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 10px;
+  }
+  
+  .users-table {
+    font-size: 14px;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: 8px;
+  }
+}
