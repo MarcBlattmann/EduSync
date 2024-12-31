@@ -8,4 +8,14 @@ export interface Profile {
   updated_at: string;
 }
 
-// ...existing code...
+export interface ChangeRequest {
+  id: number;
+  content_id: string;
+  user_id: string;
+  title: string;
+  original_content: string;
+  suggested_content: string;
+  content_type: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+}
