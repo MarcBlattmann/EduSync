@@ -12,6 +12,9 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'users' | 'changes'>('users');
+  const [selectedChange, setSelectedChange] = useState<ChangeRequest | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showRawHtml, setShowRawHtml] = useState(false);
 
   useEffect(() => {
     const checkAdminAccess = async () => {
@@ -146,6 +149,12 @@ export default function AdminPage() {
     }
   };
 
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
   if (loading) return <div className="admin-loading">Loading...</div>;
   if (error) return <div className="admin-error">Error: {error}</div>;
 
@@ -254,10 +263,8 @@ export default function AdminPage() {
                         <button
                           className="view-button"
                           onClick={() => {
-                            alert(
-                              `Original Content:\n${request.original_content}\n\n` +
-                              `Suggested Content:\n${request.suggested_content}`
-                            );
+                            setSelectedChange(request);
+                            setShowModal(true);
                           }}
                         >
                           View Changes
@@ -268,6 +275,47 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {showModal && selectedChange && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Change Request Comparison</h3>
+              <div className="modal-controls">
+                <button 
+                  className="toggle-html-button"
+                  onClick={() => setShowRawHtml(!showRawHtml)}
+                >
+                  {showRawHtml ? 'Show Formatted' : 'Show Raw HTML'}
+                </button>
+                <button className="close-button" onClick={() => setShowModal(false)}>×</button>
+              </div>
+            </div>
+            <div className="comparison-container">
+              <div className="comparison-side">
+                <h4>Original Content</h4>
+                <div className="content-box">
+                  {showRawHtml ? (
+                    <pre>{selectedChange.original_content}</pre>
+                  ) : (
+                    <div dangerouslySetInnerHTML={{ __html: selectedChange.original_content }} />
+                  )}
+                </div>
+              </div>
+              <div className="comparison-side">
+                <h4>Suggested Content</h4>
+                <div className="content-box">
+                  {showRawHtml ? (
+                    <pre>{selectedChange.suggested_content}</pre>
+                  ) : (
+                    <div dangerouslySetInnerHTML={{ __html: selectedChange.suggested_content }} />
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
