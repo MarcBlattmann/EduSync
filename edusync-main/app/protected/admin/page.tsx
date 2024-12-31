@@ -243,7 +243,7 @@ export default function AdminPage() {
                         </div>
                       )}
                       <div className="action-buttons">
-                        {request.status === 'approved' && (
+                        {(request.status === 'approved' || request.status === 'rejected') && (
                           <button
                             className="delete-button"
                             onClick={() => handleDelete(request.id)}
