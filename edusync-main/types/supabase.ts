@@ -1,5 +1,12 @@
 export type UserRole = 'user' | 'moderator' | 'admin';
 
+export interface User {
+  id: string;
+  email: string;
+  role: UserRole;
+  created_at: string;
+}
+
 export interface Profile {
   id: string;
   email: string;
