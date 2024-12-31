@@ -72,7 +72,7 @@ export default function AdminPage() {
       setError(error.message);
     } else {
       setUsers(users.map(user => 
-        user.id === userId ? { ...user, role: newRole } : user
+        user.id ===  userId? { ...user, role: newRole } : user
       ));
     }
   };
@@ -96,15 +96,12 @@ export default function AdminPage() {
                 <th>Email</th>
                 <th>Role</th>
                 <th>Created At</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
                 <tr key={user.id}>
                   <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>{new Date(user.created_at).toLocaleDateString()}</td>
                   <td>
                     <select
                       value={user.role}
@@ -115,6 +112,7 @@ export default function AdminPage() {
                       <option value="admin">Admin</option>
                     </select>
                   </td>
+                  <td>{new Date(user.created_at).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
