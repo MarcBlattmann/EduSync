@@ -2,7 +2,7 @@
 
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Heading from '@tiptap/extension-heading';
+import Heading, { Level } from '@tiptap/extension-heading';
 import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
 import Strike from '@tiptap/extension-strike';
@@ -66,7 +66,8 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
               if (value === 'paragraph') {
                 editor.chain().focus().setParagraph().run();
               } else {
-                editor.chain().focus().toggleHeading({ level: parseInt(value) }).run();
+                const level = parseInt(value) as Level;
+                editor.chain().focus().toggleHeading({ level }).run();
               }
             }}
             value={
