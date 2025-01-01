@@ -423,6 +423,34 @@
   outline: 2px solid var(--primary-color);
 }
 
+.resizable-image-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 1em 0;
+}
+
+.resizable-image-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.resize-handle {
+  position: absolute;
+  right: -6px;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  cursor: ew-resize;
+  background: rgba(0, 120, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.resizable-image-wrapper:hover .resize-handle {
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .search-results {
     padding: 16px;

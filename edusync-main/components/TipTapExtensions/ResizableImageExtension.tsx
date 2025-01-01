@@ -1,80 +1,76 @@
-import Image from '@tiptap/extension-image';
-import { mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import React, { useCallback, useState } from 'react';
+import { Node, mergeAttributes } from '@tiptap/core';
 import { NodeViewWrapper } from '@tiptap/react';
+import React, { useState } from 'react';
+
+interface ImageAttributes {
+  src: string;
+  alt?: string;
+  width?: string;
+}
 
 const ResizableImageComponent = ({ node, updateAttributes }: any) => {
+  const [width, setWidth] = useState(node.attrs.width || '100%');
   const [isResizing, setIsResizing] = useState(false);
-  const [width, setWidth] = useState(node.attrs.width);
 
-  const onResize = useCallback((e: MouseEvent) => {
-    if (!isResizing) return;
-
-    const container = (e.target as HTMLElement).closest('.image-container');
-    if (!container) return;
-
-    const rect = container.getBoundingClientRect();
-    const parentWidth = container.parentElement?.clientWidth || rect.width;
-    const relativeX = e.pageX - rect.left;
-    const newWidth = Math.max(10, Math.min(100, (relativeX / parentWidth) * 100));
-
-    setWidth(`${newWidth}%`);
-    updateAttributes({ width: `${newWidth}%` });
-  }, [isResizing, updateAttributes]);
-
-  const onResizeStart = useCallback((e: React.MouseEvent) => {
+  const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsResizing(true);
-    document.addEventListener('mousemove', onResize);
-    document.addEventListener('mouseup', onResizeEnd);
-  }, [onResize]);
 
-  const onResizeEnd = useCallback(() => {
-    setIsResizing(false);
-    document.removeEventListener('mousemove', onResize);
-    document.removeEventListener('mouseup', onResizeEnd);
-  }, [onResize]);
+    const startWidth = parseInt(width);
+    const startX = e.pageX;
+
+    const handleResize = (e: MouseEvent) => {
+      const currentX = e.pageX;
+      const diff = currentX - startX;
+      const newWidth = Math.max(100, startWidth + diff);
+      setWidth(`${newWidth}px`);
+      updateAttributes({ width: `${newWidth}px` });
+    };
+
+    const handleResizeEnd = () => {
+      setIsResizing(false);
+      window.removeEventListener('mousemove', handleResize);
+      window.removeEventListener('mouseup', handleResizeEnd);
+    };
+
+    window.addEventListener('mousemove', handleResize);
+    window.addEventListener('mouseup', handleResizeEnd);
+  };
 
   return (
     <NodeViewWrapper>
-      <div className={`image-container ${isResizing ? 'is-resizing' : ''}`}>
+      <div className="resizable-image-wrapper" contentEditable={false}>
         <img
           src={node.attrs.src}
-          alt={node.attrs.alt}
-          style={{ width: width }}
-          draggable={false}
+          alt={node.attrs.alt || ''}
+          style={{ width, height: 'auto' }}
         />
-        <div className="resize-handle" onMouseDown={onResizeStart} />
+        <div 
+          className="resize-handle" 
+          onMouseDown={handleResizeStart}
+          style={{ opacity: isResizing ? 1 : undefined }}
+        />
       </div>
     </NodeViewWrapper>
   );
 };
 
-export const ResizableImageExtension = Image.configure({
-  inline: true,
-}).extend({
+export const ResizableImage = Node.create({
   name: 'resizableImage',
+  group: 'block',
+  inline: false,
+  draggable: true,
 
   addAttributes() {
     return {
-      ...Image.options.addAttributes(),
+      src: {
+        default: null,
+      },
+      alt: {
+        default: null,
+      },
       width: {
         default: '100%',
-        renderHTML: attributes => ({
-          width: attributes.width,
-        }),
-      },
-    };
-  },
-
-  addCommands() {
-    return {
-      setResizableImage: options => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: options,
-        });
       },
     };
   },
@@ -83,14 +79,6 @@ export const ResizableImageExtension = Image.configure({
     return [
       {
         tag: 'img[src]',
-        getAttrs: dom => {
-          if (!(dom instanceof HTMLElement)) return false;
-          return {
-            src: dom.getAttribute('src'),
-            alt: dom.getAttribute('alt'),
-            width: dom.style.width || '100%',
-          };
-        },
       },
     ];
   },
@@ -100,15 +88,8 @@ export const ResizableImageExtension = Image.configure({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ResizableImageComponent);
+    return ({ node, updateAttributes }) => (
+      <ResizableImageComponent node={node} updateAttributes={updateAttributes} />
+    );
   },
 });
-
-// Add type declaration for the new command
-declare module '@tiptap/core' {
-  interface Commands<ReturnType> {
-    resizableImage: {
-      setResizableImage: (options: { src: string; alt?: string; width?: string }) => ReturnType;
-    };
-  }
-}

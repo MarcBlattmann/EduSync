@@ -12,6 +12,7 @@ import ListItem from '@tiptap/extension-list-item';
 import Code from '@tiptap/extension-code';
 import CodeBlock from '@tiptap/extension-code-block';
 import Image from '@tiptap/extension-image';
+import { ResizableImage } from './TipTapExtensions/ResizableImageExtension';
 
 import { useCallback } from 'react';
 
@@ -39,6 +40,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
           class: 'resizable-image',
         },
       }),
+      ResizableImage,
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -49,7 +51,13 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
   const addImage = useCallback(() => {
     const url = window.prompt('Enter image URL');
     if (url) {
-      editor?.chain().focus().setImage({ src: url }).run();
+      editor?.chain().focus().insertContent({
+        type: 'resizableImage',
+        attrs: {
+          src: url,
+          alt: 'image',
+        },
+      }).run();
     }
   }, [editor]);
 
