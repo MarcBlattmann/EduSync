@@ -1,14 +1,8 @@
-import { Node, mergeAttributes } from '@tiptap/core';
-import { NodeViewWrapper } from '@tiptap/react';
+import { mergeAttributes, Node } from '@tiptap/core';
+import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react';
 import React, { useState } from 'react';
 
-interface ImageAttributes {
-  src: string;
-  alt?: string;
-  width?: string;
-}
-
-const ResizableImageComponent = ({ node, updateAttributes }: any) => {
+const ImageResizeComponent = ({ node, updateAttributes }: any) => {
   const [width, setWidth] = useState(node.attrs.width || '100%');
   const [isResizing, setIsResizing] = useState(false);
 
@@ -16,15 +10,16 @@ const ResizableImageComponent = ({ node, updateAttributes }: any) => {
     e.preventDefault();
     setIsResizing(true);
 
-    const startWidth = parseInt(width);
+    const startWidth = parseInt(width as string);
     const startX = e.pageX;
 
     const handleResize = (e: MouseEvent) => {
       const currentX = e.pageX;
       const diff = currentX - startX;
       const newWidth = Math.max(100, startWidth + diff);
-      setWidth(`${newWidth}px`);
-      updateAttributes({ width: `${newWidth}px` });
+      const widthStr = `${newWidth}px`;
+      setWidth(widthStr);
+      updateAttributes({ width: widthStr });
     };
 
     const handleResizeEnd = () => {
@@ -38,17 +33,18 @@ const ResizableImageComponent = ({ node, updateAttributes }: any) => {
   };
 
   return (
-    <NodeViewWrapper>
-      <div className="resizable-image-wrapper" contentEditable={false}>
+    <NodeViewWrapper className="resizable-image-wrapper">
+      <div contentEditable={false}>
         <img
           src={node.attrs.src}
           alt={node.attrs.alt || ''}
-          style={{ width, height: 'auto' }}
+          style={{ width, display: 'block' }}
+          draggable={false}
         />
         <div 
-          className="resize-handle" 
+          className="resize-handle"
           onMouseDown={handleResizeStart}
-          style={{ opacity: isResizing ? 1 : undefined }}
+          contentEditable={false}
         />
       </div>
     </NodeViewWrapper>
@@ -59,7 +55,7 @@ export const ResizableImage = Node.create({
   name: 'resizableImage',
   group: 'block',
   inline: false,
-  draggable: true,
+  atom: true,
 
   addAttributes() {
     return {
@@ -71,16 +67,25 @@ export const ResizableImage = Node.create({
       },
       width: {
         default: '100%',
+        renderHTML: attributes => ({
+          width: attributes.width,
+        }),
       },
     };
   },
 
   parseHTML() {
-    return [
-      {
-        tag: 'img[src]',
+    return [{
+      tag: 'img[src]',
+      getAttrs: dom => {
+        if (!(dom instanceof HTMLElement)) return false;
+        return {
+          src: dom.getAttribute('src'),
+          alt: dom.getAttribute('alt'),
+          width: dom.style.width || '100%',
+        };
       },
-    ];
+    }];
   },
 
   renderHTML({ HTMLAttributes }) {
@@ -88,8 +93,6 @@ export const ResizableImage = Node.create({
   },
 
   addNodeView() {
-    return ({ node, updateAttributes }) => (
-      <ResizableImageComponent node={node} updateAttributes={updateAttributes} />
-    );
+    return ReactNodeViewRenderer(ImageResizeComponent);
   },
 });
