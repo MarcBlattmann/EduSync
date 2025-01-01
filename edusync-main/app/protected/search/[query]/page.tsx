@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import TipTapEditor from '@/components/TipTapEditor';
 import './page.css';
 
 // Define proper types for the params
@@ -152,10 +153,9 @@ export default function SearchPage({ params }: SearchPageProps) {
         </div>
       </div>
       {isEditing ? (
-        <textarea
-          className="content-editor"
-          value={editableContent}
-          onChange={(e) => setEditableContent(e.target.value)}
+        <TipTapEditor
+          content={editableContent}
+          onChange={setEditableContent}
         />
       ) : (
         <div 
