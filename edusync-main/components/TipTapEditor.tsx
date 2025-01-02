@@ -49,11 +49,20 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
         attrs: {
           src: url,
           alt: 'image',
-          width: '50%', // Changed default to 50%
+          width: '100%',
         },
       }).run();
     }
   }, [editor]);
+
+  const handleHeadingChange = (value: string) => {
+    if (value === 'paragraph') {
+      editor.chain().focus().setParagraph().run();
+    } else {
+      const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
+      editor.chain().focus().toggleHeading({ level }).run();
+    }
+  };
 
   if (!editor) return null;
 
@@ -63,14 +72,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
         <div className="toolbar-group">
           <select
             className="heading-select"
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === 'paragraph') {
-                editor.chain().focus().setParagraph().run();
-              } else {
-                editor.chain().focus().toggleHeading({ level: parseInt(value) }).run();
-              }
-            }}
+            onChange={(e) => handleHeadingChange(e.target.value)}
             value={
               editor.isActive('heading', { level: 1 })
                 ? '1'
