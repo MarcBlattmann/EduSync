@@ -1,95 +1,111 @@
-import { mergeAttributes, Node } from '@tiptap/core';
+import Image from '@tiptap/extension-image';
+import { mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-const ImageResizeComponent = ({ node, updateAttributes }: any) => {
-  const [width, setWidth] = useState(node.attrs.width || '100%');
+interface ImageResizeComponentProps {
+  node: any;
+  updateAttributes: (attrs: any) => void;
+}
+
+const ImageResizeComponent: React.FC<ImageResizeComponentProps> = ({ node, updateAttributes }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState<number>(node.attrs.width || 100);
   const [isResizing, setIsResizing] = useState(false);
+  const startPosRef = useRef<{ x: number; width: number }>({ x: 0, width: 0 });
 
-  const handleResizeStart = (e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    if (!containerRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    startPosRef.current = {
+      x: e.clientX,
+      width: rect.width,
+    };
     setIsResizing(true);
+  }, []);
 
-    const startWidth = parseInt(width as string);
-    const startX = e.pageX;
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing || !containerRef.current) return;
 
-    const handleResize = (e: MouseEvent) => {
-      const currentX = e.pageX;
-      const diff = currentX - startX;
-      const newWidth = Math.max(100, startWidth + diff);
-      const widthStr = `${newWidth}px`;
-      setWidth(widthStr);
-      updateAttributes({ width: widthStr });
+    const currentX = e.clientX;
+    const initialX = startPosRef.current.x;
+    const initialWidth = startPosRef.current.width;
+    const parentWidth = containerRef.current.parentElement?.offsetWidth || initialWidth;
+    
+    const diffX = currentX - initialX;
+    const newWidth = Math.min(100, Math.max(10, 
+      ((initialWidth + diffX) / parentWidth) * 100
+    ));
+
+    // Snap to 100% when close
+    const snappedWidth = Math.abs(newWidth - 100) < 5 ? 100 : newWidth;
+    setWidth(snappedWidth);
+    updateAttributes({ width: snappedWidth });
+  }, [isResizing, updateAttributes]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
-
-    const handleResizeEnd = () => {
-      setIsResizing(false);
-      window.removeEventListener('mousemove', handleResize);
-      window.removeEventListener('mouseup', handleResizeEnd);
-    };
-
-    window.addEventListener('mousemove', handleResize);
-    window.addEventListener('mouseup', handleResizeEnd);
-  };
+  }, [isResizing, handleMouseMove, handleMouseUp]);
 
   return (
-    <NodeViewWrapper className="resizable-image-wrapper">
-      <div contentEditable={false}>
+    <NodeViewWrapper className="image-wrapper">
+      <div 
+        ref={containerRef}
+        className={`resizable-image-container ${isResizing ? 'is-resizing' : ''}`}
+        style={{ width: `${width}%` }}
+      >
         <img
           src={node.attrs.src}
           alt={node.attrs.alt || ''}
-          style={{ width, display: 'block' }}
+          style={{ width: '100%' }}
           draggable={false}
         />
-        <div 
-          className="resize-handle"
-          onMouseDown={handleResizeStart}
-          contentEditable={false}
-        />
+        <div className="resize-handles">
+          <div 
+            className="resize-handle left" 
+            onMouseDown={handleMouseDown}
+            onTouchStart={() => {}} // Prevent touch events from interfering
+          />
+          <div 
+            className="resize-handle right" 
+            onMouseDown={handleMouseDown}
+            onTouchStart={() => {}} // Prevent touch events from interfering
+          />
+        </div>
+        {isResizing && (
+          <div className="resize-info">{Math.round(width)}%</div>
+        )}
       </div>
     </NodeViewWrapper>
   );
 };
 
-export const ResizableImage = Node.create({
+export const ResizableImageExtension = Image.extend({
   name: 'resizableImage',
-  group: 'block',
-  inline: false,
-  atom: true,
 
   addAttributes() {
     return {
-      src: {
-        default: null,
-      },
-      alt: {
-        default: null,
-      },
+      ...this.parent?.(),
       width: {
-        default: '100%',
+        default: 100,
         renderHTML: attributes => ({
-          width: attributes.width,
+          style: `width: ${attributes.width}%`,
         }),
       },
     };
-  },
-
-  parseHTML() {
-    return [{
-      tag: 'img[src]',
-      getAttrs: dom => {
-        if (!(dom instanceof HTMLElement)) return false;
-        return {
-          src: dom.getAttribute('src'),
-          alt: dom.getAttribute('alt'),
-          width: dom.style.width || '100%',
-        };
-      },
-    }];
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return ['img', mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {

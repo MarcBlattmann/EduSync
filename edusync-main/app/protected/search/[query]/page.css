@@ -3,6 +3,8 @@
   margin-top: 52.5px;
   margin-left: auto;
   margin-right: auto;
+  min-height: calc(100vh - 52.5px);
+  overflow-y: auto;
 }
 
 .search-header {
@@ -157,7 +159,9 @@
 .tiptap-container {
   border: 2px solid var(--light-color);
   border-radius: 8px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px); /* Adjust based on your header/footer heights */
 }
 
 .tiptap-toolbar {
@@ -183,14 +187,16 @@
 }
 
 .tiptap-editor {
+  flex: 1;
+  overflow-y: auto;
   padding: 16px;
-  min-height: 400px;
   background-color: white;
 }
 
 .tiptap-editor .ProseMirror {
+  min-height: 100%;
+  height: auto;
   outline: none;
-  min-height: 400px;
 }
 
 .tiptap-editor .ProseMirror > * + * {
@@ -317,25 +323,34 @@
 .image-container {
   position: relative;
   display: inline-block;
-  margin: 0.5em 0;
+  max-width: 100%;
+  margin: 1em 0;
+}
+
+.image-container img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .resize-handle {
   position: absolute;
-  right: -6px;
-  bottom: 0;
   top: 0;
+  bottom: 0;
+  right: -6px;
   width: 12px;
   cursor: ew-resize;
   background: transparent;
+  transition: background-color 0.2s;
 }
 
-.resize-handle:hover {
-  background: rgba(0, 0, 0, 0.1);
+.resize-handle:hover,
+.is-resizing .resize-handle {
+  background-color: rgba(0, 120, 255, 0.2);
 }
 
-.resize-handle:active {
-  background: rgba(0, 0, 0, 0.2);
+.is-resizing img {
+  user-select: none;
 }
 
 /* Make sure images don't exceed their container */
@@ -423,32 +438,246 @@
   outline: 2px solid var(--primary-color);
 }
 
-.resizable-image-wrapper {
+.resizable-image-container {
   position: relative;
   display: inline-block;
+  width: 100%;
   margin: 1em 0;
 }
 
-.resizable-image-wrapper img {
+.resizable-image-container img {
   display: block;
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
-.resize-handle {
+.resize-handle-left,
+.resize-handle-right {
   position: absolute;
-  right: -6px;
   top: 0;
   bottom: 0;
   width: 12px;
   cursor: ew-resize;
-  background: rgba(0, 120, 255, 0.1);
-  opacity: 0;
-  transition: opacity 0.2s;
+  background: transparent;
+  transition: background 0.2s;
 }
 
-.resizable-image-wrapper:hover .resize-handle {
-  opacity: 1;
+.resize-handle-left {
+  left: 0;
+}
+
+.resize-handle-right {
+  right: 0;
+}
+
+.resize-handle-left:hover,
+.resize-handle-right:hover,
+.is-resizing .resize-handle-left,
+.is-resizing .resize-handle-right {
+  background: rgba(0, 120, 255, 0.2);
+}
+
+.is-resizing img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.image-wrapper {
+  position: relative;
+  display: block;
+  margin: 1em 0;
+}
+
+.resizable-image-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.resizable-image-container img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: width 0.1s ease;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  background: transparent;
+  cursor: ew-resize;
+  transition: background 0.2s ease;
+}
+
+.resize-handle.left {
+  left: 0;
+}
+
+.resize-handle.right {
+  right: 0;
+}
+
+.resize-handle:hover,
+.is-resizing .resize-handle {
+  background: rgba(0, 120, 255, 0.2);
+}
+
+.resize-info {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.is-resizing img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.image-block {
+  position: relative;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.resize-handles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: transparent;
+  cursor: ew-resize;
+  pointer-events: all;
+  transition: background 0.2s ease;
+  z-index: 10; /* Added to ensure handles are above image */
+}
+
+.resize-handle.left {
+  left: 0;
+}
+
+.resize-handle.right {
+  right: 0;
+}
+
+.resize-handle:hover,
+.is-resizing .resize-handle {
+  background: rgba(0, 120, 255, 0.2);
+}
+
+.image-block {
+  position: relative;
+  width: fit-content;
+  margin: 1em auto;
+}
+
+.resizable-image-container {
+  position: relative;
+  display: block; /* Changed from inline-block */
+  width: 100%;
+  text-align: left; /* Ensure left alignment */
+}
+
+.resizable-image-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0; /* Remove any margin that might cause centering */
+}
+
+.resize-handles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: transparent;
+  cursor: ew-resize;
+  pointer-events: all;
+  transition: background 0.2s ease;
+}
+
+.resize-handle.left {
+  left: -4px;
+}
+
+.resize-handle.right {
+  right: -4px;
+}
+
+.resize-handle:hover,
+.is-resizing .resize-handle {
+  background: rgba(0, 120, 255, 0.4);
+}
+
+.resize-info {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Remove any centering styles and ensure left alignment */
+.image-block {
+  position: relative;
+  width: 100%;
+  margin: 1em 0;
+  text-align: left;
+}
+
+.resizable-image-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.image-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 1em 0;
+}
+
+/* Remove any auto margins */
+.resizable-image-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
 }
 
 @media (max-width: 768px) {

@@ -11,7 +11,7 @@ import OrderedList from '@tiptap/extension-ordered-list';
 import ListItem from '@tiptap/extension-list-item';
 import Code from '@tiptap/extension-code';
 import CodeBlock from '@tiptap/extension-code-block';
-import { ResizableImage } from './TipTapExtensions/ResizableImageExtension';
+import { ResizableImageExtension } from './TipTapExtensions/ResizableImageExtension';
 
 import { useCallback } from 'react';
 
@@ -33,7 +33,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
       ListItem,
       Code,
       CodeBlock,
-      ResizableImage,
+      ResizableImageExtension,
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -49,6 +49,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
         attrs: {
           src: url,
           alt: 'image',
+          width: '50%', // Changed default to 50%
         },
       }).run();
     }
@@ -67,8 +68,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
               if (value === 'paragraph') {
                 editor.chain().focus().setParagraph().run();
               } else {
-                const level = parseInt(value) as Level;
-                editor.chain().focus().toggleHeading({ level }).run();
+                editor.chain().focus().toggleHeading({ level: parseInt(value) }).run();
               }
             }}
             value={
