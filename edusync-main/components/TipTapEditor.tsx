@@ -55,14 +55,16 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
     }
   }, [editor]);
 
-  const handleHeadingChange = (value: string) => {
+  const handleHeadingChange = useCallback((value: string) => {
+    if (!editor) return;
+    
     if (value === 'paragraph') {
       editor.chain().focus().setParagraph().run();
     } else {
       const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
       editor.chain().focus().toggleHeading({ level }).run();
     }
-  };
+  }, [editor]);
 
   if (!editor) return null;
 
