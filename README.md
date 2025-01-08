@@ -8,7 +8,7 @@
 - **Progress Tracking** - Monitor your improvement.
 
 ## Quick Start 🚀
-1. Visit [EduSync](https://edusync.info) (beta).
+1. Visit [EduSync](https://edusync.info) (beta)
 2. Create your free account
 3. Select your subjects
 4. Start learning!
