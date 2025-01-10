@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import type { User, ChangeRequest, UserRole } from '@/types/supabase';
 import './admin.css';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -11,10 +13,20 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'users' | 'changes'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'changes' | 'createPage'>('users');
   const [selectedChange, setSelectedChange] = useState<ChangeRequest | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showRawHtml, setShowRawHtml] = useState(false);
+  const [newPageTitle, setNewPageTitle] = useState('');
+  const [newPageContent, setNewPageContent] = useState('');
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: newPageContent,
+    onUpdate: ({ editor }) => {
+      setNewPageContent(editor.getHTML());
+    },
+  });
 
   useEffect(() => {
     const checkAdminAccess = async () => {
@@ -149,6 +161,24 @@ export default function AdminPage() {
     }
   };
 
+  const handleCreatePage = async () => {
+    const supabase = createClient();
+    try {
+      const { error } = await supabase
+        .from('search_suggestions')
+        .insert([{ title: newPageTitle, content: newPageContent }]);
+  
+      if (error) throw error;
+  
+      alert('New page created successfully.');
+      setNewPageTitle('');
+      setNewPageContent('');
+    } catch (error: any) {
+      console.error('Error creating new page:', error);
+      alert('Error creating new page. Please try again.');
+    }
+  };
+
   const stripHtml = (html: string) => {
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
@@ -177,6 +207,12 @@ export default function AdminPage() {
           onClick={() => setActiveTab('changes')}
         >
           Change Requests
+        </button>
+        <button 
+          className={`tab ${activeTab === 'createPage' ? 'active' : ''}`}
+          onClick={() => setActiveTab('createPage')}
+        >
+          Create Page
         </button>
       </div>
 
@@ -276,6 +312,80 @@ export default function AdminPage() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {activeTab === 'createPage' && (
+        <div className="admin-section">
+          <h2>Create New Page</h2>
+          <input
+            type="text"
+            value={newPageTitle}
+            onChange={(e) => setNewPageTitle(e.target.value)}
+            placeholder="Page Title"
+            required
+            className="title-input"
+          />
+          <div className="editor-container">
+            <div className="editor-toolbar">
+              <div className="toolbar-group">
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+                  className={`toolbar-button ${editor?.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
+                >
+                  H1
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+                  className={`toolbar-button ${editor?.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
+                >
+                  H2
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+                  className={`toolbar-button ${editor?.isActive('heading', { level: 3 }) ? 'is-active' : ''}`}
+                >
+                  H3
+                </button>
+              </div>
+              <div className="toolbar-group">
+                <button
+                  onClick={() => editor?.chain().focus().toggleBold().run()}
+                  className={`toolbar-button ${editor?.isActive('bold') ? 'is-active' : ''}`}
+                >
+                  Bold
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleItalic().run()}
+                  className={`toolbar-button ${editor?.isActive('italic') ? 'is-active' : ''}`}
+                >
+                  Italic
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleCode().run()}
+                  className={`toolbar-button ${editor?.isActive('code') ? 'is-active' : ''}`}
+                >
+                  Code
+                </button>
+              </div>
+              <div className="toolbar-group">
+                <button
+                  onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                  className={`toolbar-button ${editor?.isActive('bulletList') ? 'is-active' : ''}`}
+                >
+                  Bullet List
+                </button>
+                <button
+                  onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+                  className={`toolbar-button ${editor?.isActive('orderedList') ? 'is-active' : ''}`}
+                >
+                  Ordered List
+                </button>
+              </div>
+            </div>
+            <EditorContent editor={editor} className="editor-content" />
+          </div>
+          <button onClick={handleCreatePage} className="create-button">Create Page</button>
         </div>
       )}
 
