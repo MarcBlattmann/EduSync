@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import TipTapEditor from '@/components/TipTapEditor';
 import './page.css';
+import DOMPurify from 'dompurify';
 
 // Define proper types for the params
 type SearchPageProps = {
@@ -23,21 +24,39 @@ export default function SearchPage({ params }: SearchPageProps) {
   const title = decodeURIComponent(query);
 
   const fetchContent = useCallback(async () => {
-    const supabase = createClient();
-    const initialContent = decodeURIComponent(searchParams.get('content') || '');
-    setEditableContent(initialContent);
-    setSavedContent(initialContent);
+    try {
+      const supabase = createClient();
+      let contentParam = searchParams.get('content');
+      let initialContent = '';
+      
+      // Safely decode content parameter
+      if (contentParam) {
+        try {
+          // Replace problematic characters before decoding
+          contentParam = contentParam.replace(/%(?![0-9A-Fa-f]{2})/g, '%25');
+          initialContent = decodeURIComponent(contentParam);
+        } catch (err) {
+          console.warn('Failed to decode content parameter, using raw content');
+          initialContent = contentParam;
+        }
+      }
 
-    // Fetch existing content from database
-    const { data, error } = await supabase
-      .from('search_suggestions')
-      .select('content')
-      .eq('title', title)
-      .single();
+      setEditableContent(initialContent);
+      setSavedContent(initialContent);
 
-    if (data) {
-      setEditableContent(data.content);
-      setSavedContent(data.content);
+      // Fetch existing content from database
+      const { data, error } = await supabase
+        .from('search_suggestions')
+        .select('content')
+        .eq('title', title)
+        .single();
+
+      if (data) {
+        setEditableContent(data.content);
+        setSavedContent(data.content);
+      }
+    } catch (error) {
+      console.error('Error fetching content:', error);
     }
   }, [searchParams, title]);
 
@@ -129,6 +148,17 @@ export default function SearchPage({ params }: SearchPageProps) {
     setIsEditing(false);
   };
 
+  const sanitizeContent = (content: string) => {
+    if (typeof window === 'undefined') return content;
+    return DOMPurify.sanitize(content, {
+      ADD_TAGS: ['img'],
+      ADD_ATTR: ['src', 'alt', 'style', 'width', 'height', 'class'],
+      ALLOW_DATA_ATTR: true,
+      KEEP_CONTENT: true,
+      USE_PROFILES: { html: true },
+    });
+  };
+
   return (
     <div className="search-results">
       <div className="search-header">
@@ -160,7 +190,7 @@ export default function SearchPage({ params }: SearchPageProps) {
       ) : (
         <div 
           className="search-content"
-          dangerouslySetInnerHTML={{ __html: savedContent }}
+          dangerouslySetInnerHTML={{ __html: sanitizeContent(savedContent) }}
         />
       )}
     </div>

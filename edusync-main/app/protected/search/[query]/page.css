@@ -147,6 +147,8 @@
   line-height: 1.5;
   max-height: none; /* Remove any max-height restriction */
   overflow: visible; /* Allow content to flow naturally */
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .search-content h2 {
@@ -157,6 +159,24 @@
 .search-content p {
   line-height: 1.6;
   margin-bottom: 16px;
+}
+
+.search-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Respektiere inline width/height Attribute */
+.search-content img[width],
+.search-content img[height] {
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+
+.search-content img[style*="width"] {
+  max-width: none !important;
 }
 
 .tiptap-container {
