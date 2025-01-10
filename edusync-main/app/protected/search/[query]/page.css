@@ -3,8 +3,9 @@
   margin-top: 52.5px;
   margin-left: auto;
   margin-right: auto;
-  min-height: calc(100vh - 52.5px);
-  overflow-y: auto;
+  height: calc(100vh - 52.5px); /* Set height to viewport height minus header */
+  overflow-y: auto; /* Enable vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .search-header {
@@ -144,6 +145,8 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   line-height: 1.5;
+  max-height: none; /* Remove any max-height restriction */
+  overflow: visible; /* Allow content to flow naturally */
 }
 
 .search-content h2 {
@@ -682,7 +685,10 @@
 
 @media (max-width: 768px) {
   .search-results {
-    padding: 16px;
+    padding: 15px;
+    height: calc(100vh - 52.5px); /* Maintain height on mobile */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .search-results h1 {
