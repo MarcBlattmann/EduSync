@@ -19,4 +19,4 @@ Founded by Marc with a simple belief: getting good grades should be straightforw
 ---
 Made with ❤️ by the EduSync team
 
-[System Status](https://stats.uptimerobot.com/RPcgHVjQIP)
+[System Status](https://stats.uptimerobot.com/RPcgHVjQIP) <- I hope its online 🙏
