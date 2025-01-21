@@ -9,7 +9,7 @@
 
 ## Quick Start 🚀
 1. Visit [EduSync](https://edusync.info) (beta)
-2. Create your free account
+2. Create your free account or login with Google.
 3. Select your subjects
 4. Start learning!
 
