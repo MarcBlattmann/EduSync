@@ -1,4 +1,4 @@
-# EduSync (In development) 📚
+# EduSync (In development) 📚 
 > Access 100+ subjects and transform the way you learn.
 
 ## Features ✨
